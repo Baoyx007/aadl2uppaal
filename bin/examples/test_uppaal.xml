@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+<declaration>clock c; chan wholeSys_imple_aController_fp; chan Controller_basic_aProcess_fp;</declaration>
+
+<template>
+<name>wholeSys_imple</name>
+<parameter/>
+
+<location id="id1">
+<name>aSensor_sensedData</name>
+</location>
+
+<location id="id2">
+<name>aController_input</name>
+</location>
+
+<location id="id3">
+<name>aController_output</name>
+</location>
+
+<location id="id4">
+<name>aMonitor_dataToView</name>
+</location>
+
+<init ref="id1"/>
+
+<!-- wholeSys.imple_c1 -->
+<transition>
+<source ref="id1"></source>
+<target ref="id2"></target>
+</transition>
+
+<!-- wholeSys.imple_aController_fp -->
+<transition>
+<source ref="id2"></source>
+<target ref="id3"></target>
+<label kind="synchronisation">wholeSys_imple_aController_fp?</label>
+</transition>
+
+<!-- wholeSys.imple_c2 -->
+<transition>
+<source ref="id3"></source>
+<target ref="id4"></target>
+</transition>
+
+</template>
+
+
+<template>
+<name>wholeSys_imple_aController</name>
+<parameter/>
+<declaration>clock wholeSys_imple_aController_clock;</declaration>
+
+<location id="id1">
+<name>aController_input</name>
+</location>
+
+<location id="id2">
+<name>aProcess_input</name>
+</location>
+
+<location id="id3">
+<name>aProcess_output</name>
+</location>
+
+<location id="id4">
+<name>aController_output</name>
+</location>
+
+<init ref="id1"/>
+
+<!-- Controller.basic_c1 -->
+<transition>
+<source ref="id1"></source>
+<target ref="id2"></target>
+<label kind="synchronisation">wholeSys_imple_aController_fp!</label>
+<label kind="guard">wholeSys_imple_aController_clock &lt; 4 </label></transition>
+
+<!-- Controller.basic_aProcess_fp -->
+<transition>
+<source ref="id2"></source>
+<target ref="id3"></target>
+<label kind="synchronisation">Controller_basic_aProcess_fp?</label>
+</transition>
+
+<!-- Controller.basic_c2 -->
+<transition>
+<source ref="id3"></source>
+<target ref="id4"></target>
+<label kind="guard">wholeSys_imple_aController_clock &lt; 2 </label></transition>
+
+</template>
+
+
+<template>
+<name>Controller_basic_aProcess</name>
+<parameter/>
+<declaration>clock Controller_basic_aProcess_clock;</declaration>
+
+<location id="id1">
+<name>aProcess_input</name>
+</location>
+
+<location id="id2">
+<name>aProcess_output</name>
+</location>
+
+<init ref="id1"/>
+
+<!-- Controller.basic_aProcess_implicit -->
+<transition>
+<source ref="id1"></source>
+<target ref="id2"></target>
+<label kind="synchronisation">Controller_basic_aProcess_fp!</label>
+</transition>
+
+</template>
+
+<system> system wholeSys_imple,wholeSys_imple_aController,Controller_basic_aProcess;</system>
+</nta>

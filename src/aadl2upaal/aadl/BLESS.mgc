@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="aadl2upaal.aadl.BLESSAnnex" x="249" y="377">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="aadl2upaal.upaal.Location"
+            endpointName="locs" kind="Simple"/>
+        <Association destinationClassName="aadl2upaal.aadl.BVar"
+            endpointName="variables" kind="Simple"/>
+        <Association destinationClassName="aadl2upaal.aadl.BTransition"
+            endpointName="trans" kind="Simple"/>
+        <Association destinationClassName="aadl2upaal.aadl.AVar"
+            endpointName="invariant" kind="Simple"/>
+    </Class>
+    <Class name="aadl2upaal.aadl.BTransition" x="518" y="368">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="aadl2upaal.upaal.Location"
+            endpointName="src" kind="Simple"/>
+        <Association destinationClassName="aadl2upaal.aadl.BUpdate"
+            endpointName="update" kind="Simple"/>
+    </Class>
+    <Class name="aadl2upaal.aadl.BVar" x="68" y="372">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="aadl2upaal.aadl.AVar"/>
+    </Class>
+    <Class name="aadl2upaal.upaal.Location" x="369" y="545">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="aadl2upaal.aadl.AVar" x="170" y="169">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="aadl2upaal.aadl.BUpdate" x="504" y="170">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="aadl2upaal.aadl.AVar"
+            endpointName="var" kind="Simple"/>
+    </Class>
+</ClassDiagram>

@@ -1,0 +1,122 @@
+system wholeSys
+end wholeSys;
+
+system implementation wholeSys.imple
+subcomponents
+aSensor: device Sensor.basic;
+aMonitor: device Monitor.basic;
+bSensor: device Sensor.basic1;
+bMonitor: device Monitor.basic1;
+aController: system Controller.basic;
+
+
+connections
+c1: data port aSensor.sensedData -> aController.input_a;
+c2: data port aController.output_a -> aMonitor.dataToView;
+c3: data port bSensor.sensedData -> aController.input_b;
+c4: data port aController.output_b -> bMonitor.dataToView;
+
+flows
+fp: end to end flow aSensor.fp -> c1 -> aController.fp-> c2 -> aMonitor.fp;
+fp1: end to end flow bSensor.fp -> c3 -> aController.fp1 -> c4 -> bMonitor.fp;
+
+ 
+properties
+Latency => 10 ms applies to c1;
+end wholeSys.imple;
+ 
+device Sensor
+features
+	sensedData:out data port storage;
+	failure:out event port;
+flows
+	fp: flow source sensedData;
+end Sensor;
+
+device implementation Sensor.basic
+flows
+	fp: flow source sensedData;
+
+end Sensor.basic;
+
+device implementation Sensor.basic1
+flows
+	fp: flow source sensedData;
+
+end Sensor.basic1;
+
+
+system Controller
+features
+input_a: in data port storage;
+output_a: out data port storage;
+input_b: in data port storage;
+output_b: out data port storage;
+
+flows
+fp: flow path input_a -> output_a;
+fp1: flow path input_b -> output_b;
+end Controller;
+
+system implementation Controller.basic
+subcomponents
+aProcess: process Encryption.basic;
+connections
+c1: data port input_a->aProcess.input_a;
+c2: data port aProcess.output_a-> output_a;
+c3: data port input_b->aProcess.input_b;
+c4: data port aProcess.output_b-> output_b;
+flows
+fp: flow path input_a -> c1 -> aProcess.fp -> c2 -> output_a;
+fp1: flow path input_b -> c3 -> aProcess.fp1 -> c4 -> output_b;
+
+properties
+Latency => 4 ms applies to c1;
+Latency => 2 ms applies to c2;
+Latency => 6 ms applies to c3;
+Latency => 1 ms applies to c4;
+end Controller.basic;
+
+process Encryption
+features
+input_a: in data port storage;
+output_a: out data port storage ;
+input_b: in data port storage;
+output_b: out data port storage ;
+flows
+fp: flow path input_a -> output_a;
+fp1: flow path input_b -> output_b;
+end Encryption;
+
+process implementation Encryption.basic
+flows
+fp: flow path input_a -> output_a;
+fp1: flow path input_b -> output_b;
+end Encryption.basic;
+
+device Monitor
+features
+dataToView:in data port storage;
+flows
+fp: flow sink dataToView;
+
+end Monitor;
+
+device implementation Monitor.basic
+flows
+fp: flow sink dataToView;
+end Monitor.basic;
+
+device implementation Monitor.basic1
+flows
+fp: flow sink dataToView;
+end Monitor.basic1;
+
+
+data storage
+properties
+Source_Data_Size=> 4kb;
+end storage;
+
+data implementation storage.basic
+end storage.basic;

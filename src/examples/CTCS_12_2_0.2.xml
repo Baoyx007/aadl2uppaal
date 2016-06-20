@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+const double PERIOD=0.5;
+const double bound=2.0;
+const int MAsize=3;
+const int SR=300;
+const int b=1;
+const int start=0;
+const double SB_Rate=-0.8;
+const double EB_Rate=-1.0;
+const double PI = 3.1415926;
+
+
+//    rbc
+broadcast chan r;
+broadcast chan m;
+broadcast chan ea;
+
+//train
+broadcast chan ts;
+broadcast chan cs;
+broadcast chan cv;
+broadcast chan ca;
+
+//controller :make train start
+broadcast chan train_start;
+
+//train variable
+clock v = 0.0;
+clock s = 0.0;
+double a = 0.0;
+
+//IMA
+int i,eoa;
+
+typedef struct
+{
+    int ModeTypes;
+    int v1;
+    int v2;
+    int e;
+}Segment;
+int iSeg,nSeg;
+
+typedef struct 
+{
+    Segment seg[MAsize];
+}MovementAuthority;
+
+MovementAuthority iMA;
+
+
+// normal_random
+double normal_random()
+{
+    double u = random(1);
+    double v = random(1);
+    double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);
+if(x&lt;0)
+    return x*-1;
+else
+    return x;
+}
+
+double GaussianNoise(double mu, double sigma){
+    double u = random(1);
+    double v = random(1);
+    double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);
+    double ret = x*sigma + mu;
+    if(ret&lt;0)
+        return ret*-1;
+    else
+        return ret;
+}
+
+
+double Normal(double mu, double sigma){
+    double u = random(1);
+    double v = random(1);
+    double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);
+    double ret =  x*sigma + mu;
+    if(ret&lt;0)
+        return ret*-1;
+else
+    return ret;
+}
+
+double Normal2(double mu, double sigma){
+    double u = random(1);
+    double v = random(1);
+    double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);
+    double ret =  x*sigma + mu;
+    return ret;
+}
+
+double a_strategy(){
+    return  1.0;
+}</declaration>
+	<template>
+		<name>Train</name>
+		<declaration>clock tt;
+double t_random_delay;
+
+//if train' v equal to zero
+//double v_temp;
+//double time;
+double aABS;
+bool neg=false;
+void addAccVariation(){
+    tt=0;
+    aABS = a;
+    neg=false;
+    if (aABS &lt; 0){
+        aABS=-aABS;
+        neg=true;
+    }
+    aABS = aABS-Normal(0.1,0.05);
+    if(aABS&lt;=0){
+        a=0;
+    }else{
+        if(neg==true){
+            a=-aABS;
+        }else{
+            a=aABS;
+        }
+    }
+}
+
+void initilize(){
+    tt=0;
+    a=a_strategy();
+} </declaration>
+		<location id="id0" x="51" y="-161">
+			<label kind="invariant" x="110" y="-187">tt&lt;=t_random_delay &amp;&amp;
+v'==a &amp;&amp;
+s' == v</label>
+		</location>
+		<location id="id1" x="59" y="-93">
+			<name x="51" y="-127">delay</name>
+			<label kind="invariant" x="42" y="-68">tt&lt;=t_random_delay &amp;&amp;
+v'==a &amp;&amp;
+s' == v</label>
+		</location>
+		<location id="id2" x="-170" y="-221">
+			<name x="-178" y="-255">sendV</name>
+			<label kind="invariant" x="-246" y="-230">v'==a &amp;&amp;
+s' == v</label>
+		</location>
+		<location id="id3" x="59" y="-221">
+			<name x="50" y="-255">sendS</name>
+			<committed/>
+		</location>
+		<location id="id4" x="-170" y="-93">
+			<name x="-178" y="-127">running</name>
+			<label kind="invariant" x="-221" y="-68">v'==a &amp;&amp;
+s' == v</label>
+			<urgent/>
+		</location>
+		<location id="id5" x="-306" y="-93">
+			<name x="-314" y="-127">start</name>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<label kind="guard" x="10" y="-216">tt&gt;=t_random_delay</label>
+			<label kind="synchronisation" x="10" y="-199">cs!</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="guard" x="17" y="-144">tt&gt;=t_random_delay</label>
+			<label kind="assignment" x="-93" y="-195">tt=0,
+t_random_delay=Normal(0.15,0.04)</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="-153" y="-102">tt=0,
+t_random_delay=Normal(0.15,0.04)</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-153" y="-178">ca?</label>
+			<label kind="assignment" x="-255" y="-170">addAccVariation()</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-68" y="-246">cv!</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-255" y="-119">ts?</label>
+			<label kind="assignment" x="-272" y="-85">initilize()</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">RBC</name>
+		<declaration>clock t;
+double random_delay,random_running;
+// Place local declarations here.
+//这有可能是不确定的
+void sendMovementAuthority(){
+    int j=0;
+    for(j=0;j&lt;MAsize;j++){
+        iMA.seg[j].v1= 76+10;
+        iMA.seg[j].v2= 76;
+        iMA.seg[j].e= 2000;
+    }
+}
+
+void sendEOA(){
+    eoa=6000;
+}
+
+</declaration>
+		<location id="id6" x="459" y="-110">
+			<label kind="invariant" x="459" y="-102">t&lt;=random_delay</label>
+		</location>
+		<location id="id7" x="331" y="-110">
+			<label kind="invariant" x="321" y="-93">t&lt;=random_delay</label>
+		</location>
+		<location id="id8" x="442" y="-17">
+			<name x="432" y="-51">delay</name>
+			<label kind="invariant" x="432" y="0">t&lt;=random_delay</label>
+		</location>
+		<location id="id9" x="59" y="-195">
+			<name x="49" y="-229">sendM</name>
+			<committed/>
+		</location>
+		<location id="id10" x="442" y="-195">
+			<name x="432" y="-229">reciveReq</name>
+			<urgent/>
+		</location>
+		<location id="id11" x="59" y="-17">
+			<name x="8" y="-51">waiting</name>
+		</location>
+		<init ref="id11"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id10"/>
+			<label kind="guard" x="450" y="-186">t&gt;=random_delay</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="guard" x="349" y="-144">t&gt;=random_delay</label>
+			<label kind="assignment" x="382" y="-136">t=0,
+random_delay=Normal(0.05,0.05)</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="guard" x="289" y="-76">t&gt;=random_delay</label>
+			<label kind="assignment" x="272" y="-68">t=0,
+random_delay=Normal(0.05,0.05)</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="238" y="-51">r?</label>
+			<label kind="assignment" x="178" y="-17">t=0,
+random_delay=Normal(0.05,0.05)</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="69" y="-140">ea!</label>
+			<label kind="assignment" x="42" y="-170">sendEOA()</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="246" y="-195">m!</label>
+			<label kind="assignment" x="136" y="-221">sendMovementAuthority()</label>
+		</transition>
+	</template>
+	<template>
+		<name>Controller</name>
+		<declaration>clock t;
+double c_random_delay;
+
+//SBI
+bool B1(){
+    return  v*1.0 &lt; iMA.seg[iSeg].v2;
+}
+
+bool notB1(){
+    return  1.0*v &gt;= iMA.seg[iSeg].v2;
+}
+
+bool B2(){
+    return  (v*v + 2*b*s)&lt;(iMA.seg[nSeg].v2*iMA.seg[nSeg].v2+2*b*iMA.seg[iSeg].e);
+}
+
+bool notB2(){
+    return  (v*v + 2*b*s)&gt;=(iMA.seg[nSeg].v2*iMA.seg[nSeg].v2+2*b*iMA.seg[iSeg].e);
+}
+
+//EBI
+bool B3(){
+    return  1.0*v &lt;= iMA.seg[iSeg].v1;
+}
+
+bool notB3(){
+    return  1.0*v &gt; iMA.seg[iSeg].v1;
+}
+
+
+bool B4(){
+    return  (v*v + 2*b*s)&lt;(iMA.seg[nSeg].v1*iMA.seg[nSeg].v1+2*b*iMA.seg[iSeg].e);
+}
+
+bool notB4(){
+    return  (v*v + 2*b*s)&gt;=(iMA.seg[nSeg].v1*iMA.seg[nSeg].v1+2*b*iMA.seg[iSeg].e);
+}
+
+void updateSegment(){
+    int j = 0;
+    for(j=0;j&lt;MAsize;j++){
+        if(iMA.seg[j].e*(j+1)-s&gt;0){
+            iSeg = j;
+            if(j==MAsize-1){
+                nSeg = j;
+            }else{
+                nSeg = j+1;
+            }
+            j= MAsize;
+        }
+    }
+}</declaration>
+		<location id="id12" x="204" y="246">
+			<label kind="invariant" x="194" y="263">t&lt;=c_random_delay</label>
+		</location>
+		<location id="id13" x="212" y="153">
+			<name x="202" y="119">delay</name>
+			<label kind="invariant" x="170" y="102">t&lt;=c_random_delay</label>
+		</location>
+		<location id="id14" x="212" y="382">
+		</location>
+		<location id="id15" x="102" y="42">
+			<committed/>
+		</location>
+		<location id="id16" x="314" y="42">
+		</location>
+		<location id="id17" x="221" y="-17">
+			<name x="211" y="-51">rv_m_ea</name>
+		</location>
+		<location id="id18" x="-552" y="450">
+			<name x="-560" y="416">STOP</name>
+		</location>
+		<location id="id19" x="-544" y="144">
+			<name x="-552" y="110">EBI</name>
+			<label kind="invariant" x="-554" y="161">t&lt;=PERIOD</label>
+		</location>
+		<location id="id20" x="468" y="459">
+			<name x="459" y="425">CSB</name>
+			<committed/>
+		</location>
+		<location id="id21" x="-204" y="459">
+			<name x="-212" y="425">SBI</name>
+			<label kind="invariant" x="-212" y="476">t&lt;=bound</label>
+		</location>
+		<location id="id22" x="-195" y="153">
+			<name x="-203" y="119">CMF</name>
+			<committed/>
+		</location>
+		<location id="id23" x="459" y="161">
+			<name x="451" y="127">MFR</name>
+		</location>
+		<location id="id24" x="450" y="-170">
+			<name x="442" y="-204">start</name>
+			<urgent/>
+		</location>
+		<location id="id25" x="459" y="-17">
+			<name x="451" y="-51">CMA</name>
+			<committed/>
+		</location>
+		<location id="id26" x="34" y="-17">
+			<name x="0" y="-51">GMA</name>
+		</location>
+		<init ref="id24"/>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id23"/>
+			<label kind="guard" x="289" y="144">t&gt;=c_random_delay</label>
+			<label kind="synchronisation" x="331" y="178">ca!</label>
+			<label kind="assignment" x="246" y="221">t=0,updateSegment(),a=a_strategy()</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id12"/>
+			<label kind="guard" x="76" y="195">t&gt;=c_random_delay</label>
+			<label kind="assignment" x="8" y="212">c_random_delay=Normal(0.06,0.06),t=0</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-590" y="106">ca!</label>
+			<label kind="assignment" x="-590" y="123">a=EB_Rate,updateSegment(),t=0</label>
+			<nail x="-595" y="161"/>
+			<nail x="-586" y="85"/>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="212" y="-110">r!</label>
+			<label kind="assignment" x="306" y="-102">i=0,t=0</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id13"/>
+			<label kind="guard" x="102" y="119">B1() || B2()</label>
+			<label kind="assignment" x="-127" y="161">c_random_delay=Normal(0.07,0.07),t=0</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id20"/>
+			<label kind="synchronisation" x="280" y="374">cv?</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="42" y="382">cs?</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id22"/>
+			<label kind="guard" x="-119" y="34">s&gt;=eoa-SR</label>
+			<label kind="synchronisation" x="-109" y="8">r!</label>
+			<label kind="assignment" x="-109" y="25">i=i+1</label>
+			<nail x="-127" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id22"/>
+			<label kind="guard" x="-17" y="85">s&lt;eoa-SR</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="246" y="25">cv?</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="382" y="68">cs?</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="290" y="-38">ea?</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="119" y="-8">m?</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id21"/>
+			<label kind="guard" x="145" y="434">notB1() || notB2()</label>
+			<label kind="synchronisation" x="297" y="442">ca!</label>
+			<label kind="assignment" x="51" y="459">t=0,updateSegment(),a=SB_Rate</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-612" y="238">v&lt;=0</label>
+			<label kind="synchronisation" x="-548" y="280">ca!</label>
+			<label kind="assignment" x="-552" y="297">updateSegment(),a=0</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-493" y="289">notB3() || notB4()</label>
+			<label kind="synchronisation" x="-425" y="238">ca!</label>
+			<label kind="assignment" x="-518" y="340">t=0,updateSegment(),a=EB_Rate</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-416" y="119">notB3() || notB4()</label>
+			<label kind="synchronisation" x="-374" y="161">ca!</label>
+			<label kind="assignment" x="-484" y="144">t=0,updateSegment(),a=EB_Rate</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id21"/>
+			<label kind="guard" x="-195" y="238">notB1() || notB2()</label>
+			<label kind="synchronisation" x="-195" y="255">ca!</label>
+			<label kind="assignment" x="-195" y="289">a=SB_Rate,t=0,updateSegment()</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id23"/>
+			<label kind="guard" x="459" y="272">B1() || B2()</label>
+			<label kind="synchronisation" x="463" y="293">ca!</label>
+			<label kind="assignment" x="463" y="310">updateSegment(),t=0,a=a_strategy()</label>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id23"/>
+			<label kind="guard" x="476" y="17">iMA.seg[0].v1!=0</label>
+			<label kind="synchronisation" x="467" y="59">ts!</label>
+			<label kind="assignment" x="476" y="76">t=0,updateSegment(),a=a_strategy()</label>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id24"/>
+			<label kind="guard" x="459" y="-127">iMA.seg[0].v1==0</label>
+		</transition>
+	</template>
+	<template>
+		<name>dispatcher</name>
+		<location id="id27" x="0" y="0">
+		</location>
+		<init ref="id27"/>
+	</template>
+	<system>// Place template instantiations here.
+//Process = Template();
+
+// List one or more processes to be composed into a system.
+system RBC,Train,Controller;</system>
+	<queries>
+		<query>
+			<formula>simulate 100 [&lt;=100]{ s&gt;26 &amp;&amp; s&lt;39}
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>simulate 50 [&lt;=300] {a}
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>simulate 50 [&lt;=300] {s}
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>simulate 50 [&lt;=300] {v}
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>simulate 20 [&lt;=100] {i}
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>Pr[&lt;=250](&lt;&gt; v&lt;=0 &amp;&amp;  s&gt;5000  )
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>Pr[&lt;=300](&lt;&gt; v&lt;=0 &amp;&amp;  s&lt;6000 &amp;&amp; s&gt;0 )
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>Pr[&lt;=100](&lt;&gt; v==0 &amp;&amp; i!=0)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>Pr[&lt;=100](&lt;&gt; s&gt;26 &amp;&amp; s&lt;39)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>Pr[&lt;=300](&lt;&gt; v&gt;76  )
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>
