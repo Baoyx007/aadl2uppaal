@@ -34,7 +34,6 @@ double a_strategy(){
 <template>
 <name>Train</name>
 <declaration>
-clock Train_clock
 clock Train_clock;
 
 </declaration>
@@ -100,7 +99,6 @@ clock Train_clock;
 <template>
 <name>RBC</name>
 <declaration>
-clock RBC_clock
 clock RBC_clock;
 
 </declaration>
@@ -166,7 +164,6 @@ clock RBC_clock;
 <template>
 <name>pController</name>
 <declaration>
-clock pController_clock
 clock pController_clock;
 
 </declaration>

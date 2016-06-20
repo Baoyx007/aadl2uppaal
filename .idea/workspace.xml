@@ -2,20 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4a9590df-9f95-46a8-858a-674c97791394" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/examples/MA_with_U_uppaal.xml" afterPath="$PROJECT_DIR$/bin/examples/MA_with_U_uppaal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/aadl/Distribution.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/aadl/Distribution.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/aadl/UVar.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/aadl/UVar.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/upaal/UModel.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/upaal/UModel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/NodeVisitor.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/NodeVisitor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/examples/MA_with_U_uppaal.xml" afterPath="$PROJECT_DIR$/src/examples/MA_with_U_uppaal.xml" />
     </list>
     <ignored path="aadl2uppaal.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,8 +39,8 @@
       <file leaf-file-name="UpaalGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="70" column="49" selection-start-line="70" selection-start-column="49" selection-end-line="70" selection-end-column="49" />
+            <state relative-caret-position="239">
+              <caret line="37" column="43" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="43" />
               <folding>
                 <element signature="docComment;method#processAADLModel#0;class#UpaalGenerator#0" expanded="false" />
                 <element signature="e#1752#1782#0" expanded="false" />
@@ -62,6 +51,16 @@
                 <element signature="method#processNondeterministic#0;class#UpaalGenerator#0" expanded="false" />
                 <element signature="e#4262#4322#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Template.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="52" column="39" selection-start-line="52" selection-start-column="39" selection-end-line="52" selection-end-column="39" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -83,19 +82,6 @@
               <caret line="177" column="0" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Location.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-              <folding>
-                <element signature="e#338#339#0" expanded="true" />
-                <element signature="e#361#362#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -131,13 +117,13 @@
         <option value="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" />
         <option value="$PROJECT_DIR$/src/aadl2upaal/visitor/NodeVisitor.java" />
         <option value="$PROJECT_DIR$/src/aadl2upaal/upaal/UModel.java" />
-        <option value="$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java" />
         <option value="$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java" />
-        <option value="$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java" />
         <option value="$PROJECT_DIR$/src/aadl2upaal/aadl/UVar.java" />
         <option value="$PROJECT_DIR$/src/aadl2upaal/aadl/Distribution.java" />
         <option value="$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java" />
       </list>
     </option>
   </component>
@@ -641,7 +627,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -938,14 +924,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/examples/MA_with_U_uppaal.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
-          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/TypeMapping.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -975,23 +953,6 @@
         <state relative-caret-position="357">
           <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="70" column="49" selection-start-line="70" selection-start-column="49" selection-end-line="70" selection-end-column="49" />
-          <folding>
-            <element signature="docComment;method#processAADLModel#0;class#UpaalGenerator#0" expanded="false" />
-            <element signature="e#1752#1782#0" expanded="false" />
-            <element signature="e#2412#2447#0" expanded="false" />
-            <element signature="e#2762#2797#0" expanded="false" />
-            <element signature="method#processFlow#0;class#UpaalGenerator#0" expanded="false" />
-            <element signature="e#3446#3482#0" expanded="false" />
-            <element signature="method#processNondeterministic#0;class#UpaalGenerator#0" expanded="false" />
-            <element signature="e#4262#4322#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1027,28 +988,6 @@
         <state relative-caret-position="0">
           <caret line="172" column="52" selection-start-line="172" selection-start-column="52" selection-end-line="172" selection-end-column="52" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="2" selection-end-line="39" selection-end-column="5" />
-          <folding>
-            <element signature="e#2161#2162#0" expanded="true" />
-            <element signature="e#2180#2181#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding>
-            <element signature="e#338#339#0" expanded="true" />
-            <element signature="e#361#362#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1128,6 +1067,52 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="37" column="43" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="43" />
+          <folding>
+            <element signature="docComment;method#processAADLModel#0;class#UpaalGenerator#0" expanded="false" />
+            <element signature="e#1752#1782#0" expanded="false" />
+            <element signature="e#2412#2447#0" expanded="false" />
+            <element signature="e#2762#2797#0" expanded="false" />
+            <element signature="method#processFlow#0;class#UpaalGenerator#0" expanded="false" />
+            <element signature="e#3446#3482#0" expanded="false" />
+            <element signature="method#processNondeterministic#0;class#UpaalGenerator#0" expanded="false" />
+            <element signature="e#4262#4322#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="52" column="39" selection-start-line="52" selection-start-column="39" selection-end-line="52" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
+          <folding>
+            <element signature="e#338#339#0" expanded="true" />
+            <element signature="e#361#362#0" expanded="true" />
+            <element signature="e#394#395#0" expanded="true" />
+            <element signature="e#417#418#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/examples/MA_with_U_uppaal.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
           <folding />
         </state>
       </provider>

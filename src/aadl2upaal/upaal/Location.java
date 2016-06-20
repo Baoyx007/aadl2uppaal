@@ -14,7 +14,9 @@ public class Location {
 	public Location(String name,DataPort port) {
 		this.port = port;
 	}
-
+	public Location(DataPort port){
+		this.port = port;
+	}
 	public boolean equals(Object o) {
 		if (!(o instanceof Location))
 			return false;
