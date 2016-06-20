@@ -11,7 +11,7 @@ public class Location {
 	public Integer id = null;
 	public String invariant = "";
 
-	public Location(DataPort port) {
+	public Location(String name,DataPort port) {
 		this.port = port;
 	}
 

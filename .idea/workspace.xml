@@ -2,7 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4a9590df-9f95-46a8-858a-674c97791394" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/examples/test4.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/examples/MA_with_U_uppaal.xml" afterPath="$PROJECT_DIR$/bin/examples/MA_with_U_uppaal.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/aadl/Distribution.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/aadl/Distribution.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/aadl/UVar.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/aadl/UVar.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/upaal/UModel.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/upaal/UModel.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/NodeVisitor.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/NodeVisitor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/examples/MA_with_U_uppaal.xml" afterPath="$PROJECT_DIR$/src/examples/MA_with_U_uppaal.xml" />
     </list>
     <ignored path="aadl2uppaal.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,30 +37,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Application.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/aadl2upaal/Application.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="24" column="43" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="AAXLParser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="799">
-              <caret line="79" column="51" selection-start-line="79" selection-start-column="51" selection-end-line="79" selection-end-column="51" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#987#988#0" expanded="false" />
-                <element signature="e#1004#1005#0" expanded="false" />
-                <element signature="e#1041#1042#0" expanded="false" />
-                <element signature="e#1072#1073#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="0">
+              <caret line="172" column="52" selection-start-line="172" selection-start-column="52" selection-end-line="172" selection-end-column="52" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -55,21 +50,15 @@
       <file leaf-file-name="UpaalGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
+            <state relative-caret-position="0">
               <caret line="70" column="49" selection-start-line="70" selection-start-column="49" selection-end-line="70" selection-end-column="49" />
               <folding>
-                <element signature="imports" expanded="false" />
                 <element signature="docComment;method#processAADLModel#0;class#UpaalGenerator#0" expanded="false" />
-                <element signature="method#processAADLModel#0;class#UpaalGenerator#0" expanded="false" />
                 <element signature="e#1752#1782#0" expanded="false" />
                 <element signature="e#2412#2447#0" expanded="false" />
                 <element signature="e#2762#2797#0" expanded="false" />
                 <element signature="method#processFlow#0;class#UpaalGenerator#0" expanded="false" />
                 <element signature="e#3446#3482#0" expanded="false" />
-                <element signature="e#3726#3727#0" expanded="false" />
-                <element signature="e#3746#3747#0" expanded="false" />
-                <element signature="e#3787#3788#0" expanded="false" />
-                <element signature="e#3814#3815#0" expanded="false" />
                 <element signature="method#processNondeterministic#0;class#UpaalGenerator#0" expanded="false" />
                 <element signature="e#4262#4322#0" expanded="false" />
               </folding>
@@ -77,47 +66,46 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="note.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/note.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-            <state split_layout="FIRST">
-              <first_editor relative-caret-position="0">
-                <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-                <folding />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-          <provider editor-type-id="MarkdownFxPreviewEditor">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UpaalWriter.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UpaalWriter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="146" column="38" selection-start-line="146" selection-start-column="38" selection-end-line="146" selection-end-column="38" />
+            <state relative-caret-position="-9">
+              <caret line="117" column="29" selection-start-line="117" selection-start-column="29" selection-end-line="117" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="nondeterministic_ma.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/examples/nondeterministic_ma.xml">
+      <file leaf-file-name="Transform2U.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="668">
+              <caret line="177" column="0" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Location.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+              <folding>
+                <element signature="e#338#339#0" expanded="true" />
+                <element signature="e#361#362#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="APort.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/aadl2upaal/aadl/APort.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NondeterParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/aadl2upaal/nondeterministic/NondeterParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -138,10 +126,18 @@
       <list>
         <option value="$PROJECT_DIR$/src/aadl2upaal/Application.java" />
         <option value="$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser2.java" />
-        <option value="$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java" />
         <option value="$PROJECT_DIR$/src/aadl2upaal/upaal/note.md" />
-        <option value="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" />
         <option value="$PROJECT_DIR$/src/examples/MA_with_U_uppaal.xml" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/visitor/NodeVisitor.java" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/upaal/UModel.java" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/aadl/UVar.java" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/aadl/Distribution.java" />
+        <option value="$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -160,15 +156,41 @@
             <id>Code style issuesJava</id>
           </State>
           <State>
+            <id>General</id>
+          </State>
+          <State>
+            <id>Groovy</id>
+          </State>
+          <State>
+            <id>J2ME issuesJava</id>
+          </State>
+          <State>
             <id>Java</id>
           </State>
           <State>
             <id>Performance issuesJava</id>
           </State>
           <State>
+            <id>Plugin DevKit</id>
+          </State>
+          <State>
             <id>Probable bugsJava</id>
           </State>
+          <State>
+            <id>Properties Files</id>
+          </State>
+          <State>
+            <id>Threading issuesGroovy</id>
+          </State>
+          <State>
+            <id>Threading issuesJava</id>
+          </State>
         </expanded-state>
+        <selected-state>
+          <State>
+            <id>Ant inspections</id>
+          </State>
+        </selected-state>
       </profile-state>
     </entry>
   </component>
@@ -319,16 +341,38 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="aadl2uppaal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="aadl2uppaal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="aadl2upaal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="aadl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="FullScreen" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="FullScreen" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -615,6 +659,7 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" x="100" y="100" width="1080" height="600" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
@@ -662,13 +707,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="799">
           <caret line="79" column="51" selection-start-line="79" selection-start-column="51" selection-end-line="79" selection-end-column="51" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#987#988#0" expanded="false" />
-            <element signature="e#1004#1005#0" expanded="false" />
-            <element signature="e#1041#1042#0" expanded="false" />
-            <element signature="e#1072#1073#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -677,18 +716,12 @@
         <state relative-caret-position="221">
           <caret line="70" column="49" selection-start-line="70" selection-start-column="49" selection-end-line="70" selection-end-column="49" />
           <folding>
-            <element signature="imports" expanded="false" />
             <element signature="docComment;method#processAADLModel#0;class#UpaalGenerator#0" expanded="false" />
-            <element signature="method#processAADLModel#0;class#UpaalGenerator#0" expanded="false" />
             <element signature="e#1752#1782#0" expanded="false" />
             <element signature="e#2412#2447#0" expanded="false" />
             <element signature="e#2762#2797#0" expanded="false" />
             <element signature="method#processFlow#0;class#UpaalGenerator#0" expanded="false" />
             <element signature="e#3446#3482#0" expanded="false" />
-            <element signature="e#3726#3727#0" expanded="false" />
-            <element signature="e#3746#3747#0" expanded="false" />
-            <element signature="e#3787#3788#0" expanded="false" />
-            <element signature="e#3814#3815#0" expanded="false" />
             <element signature="method#processNondeterministic#0;class#UpaalGenerator#0" expanded="false" />
             <element signature="e#4262#4322#0" expanded="false" />
           </folding>
@@ -791,6 +824,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="166">
           <caret line="539" column="37" selection-start-line="539" selection-start-column="37" selection-end-line="539" selection-end-column="37" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -798,20 +832,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1207">
           <caret line="86" column="8" selection-start-line="86" selection-start-column="8" selection-end-line="86" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="799">
-          <caret line="79" column="51" selection-start-line="79" selection-start-column="51" selection-end-line="79" selection-end-column="51" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#987#988#0" expanded="false" />
-            <element signature="e#1004#1005#0" expanded="false" />
-            <element signature="e#1041#1042#0" expanded="false" />
-            <element signature="e#1072#1073#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -821,29 +842,6 @@
           <caret line="24" column="43" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="70" column="49" selection-start-line="70" selection-start-column="49" selection-end-line="70" selection-end-column="49" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="docComment;method#processAADLModel#0;class#UpaalGenerator#0" expanded="false" />
-            <element signature="method#processAADLModel#0;class#UpaalGenerator#0" expanded="false" />
-            <element signature="e#1752#1782#0" expanded="false" />
-            <element signature="e#2412#2447#0" expanded="false" />
-            <element signature="e#2762#2797#0" expanded="false" />
-            <element signature="method#processFlow#0;class#UpaalGenerator#0" expanded="false" />
-            <element signature="e#3446#3482#0" expanded="false" />
-            <element signature="e#3726#3727#0" expanded="false" />
-            <element signature="e#3746#3747#0" expanded="false" />
-            <element signature="e#3787#3788#0" expanded="false" />
-            <element signature="e#3814#3815#0" expanded="false" />
-            <element signature="method#processNondeterministic#0;class#UpaalGenerator#0" expanded="false" />
-            <element signature="e#4262#4322#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -880,14 +878,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="6" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="6" />
           <folding />
         </state>
       </provider>
@@ -950,16 +940,202 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/examples/MA_with_U_uppaal.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4526">
-          <caret line="108" column="18" selection-start-line="108" selection-start-column="18" selection-end-line="108" selection-end-column="18" />
+        <state relative-caret-position="-51">
+          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/TypeMapping.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/aadl/HybirdAnnex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/aadl/ANode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/NodeVisitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="70" column="49" selection-start-line="70" selection-start-column="49" selection-end-line="70" selection-end-column="49" />
+          <folding>
+            <element signature="docComment;method#processAADLModel#0;class#UpaalGenerator#0" expanded="false" />
+            <element signature="e#1752#1782#0" expanded="false" />
+            <element signature="e#2412#2447#0" expanded="false" />
+            <element signature="e#2762#2797#0" expanded="false" />
+            <element signature="method#processFlow#0;class#UpaalGenerator#0" expanded="false" />
+            <element signature="e#3446#3482#0" expanded="false" />
+            <element signature="method#processNondeterministic#0;class#UpaalGenerator#0" expanded="false" />
+            <element signature="e#4262#4322#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="146" column="38" selection-start-line="146" selection-start-column="38" selection-end-line="146" selection-end-column="38" />
+        <state relative-caret-position="-9">
+          <caret line="117" column="29" selection-start-line="117" selection-start-column="29" selection-end-line="117" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/UModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
+          <folding>
+            <element signature="e#2096#2097#0" expanded="true" />
+            <element signature="e#2121#2122#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Channel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="172" column="52" selection-start-line="172" selection-start-column="52" selection-end-line="172" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Template.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="2" selection-end-line="39" selection-end-column="5" />
+          <folding>
+            <element signature="e#2161#2162#0" expanded="true" />
+            <element signature="e#2180#2181#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Location.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding>
+            <element signature="e#338#339#0" expanded="true" />
+            <element signature="e#361#362#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/aadl/UType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/aadl/UncertaintyAnnex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/aadl/UVar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/aadl/Distribution.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="641">
+          <caret line="56" column="17" selection-start-line="56" selection-start-column="17" selection-end-line="56" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/upaal/Transition.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/aadl/AVar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="20" column="18" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
+          <folding>
+            <element signature="e#349#350#0" expanded="true" />
+            <element signature="e#367#368#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home/src.zip!/java/lang/String.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="1805" column="15" selection-start-line="1805" selection-start-column="15" selection-end-line="1805" selection-end-column="15" />
+          <folding>
+            <element signature="e#70749#70750#0" expanded="true" />
+            <element signature="e#70802#70803#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="668">
+          <caret line="177" column="0" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aadl2upaal/aadl/APort.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
           <folding />
         </state>
       </provider>

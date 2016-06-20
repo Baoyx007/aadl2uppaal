@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/src/aadl2upaal/Application.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser2.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" charset="GBK" />
   </component>
 </project>

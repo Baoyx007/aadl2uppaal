@@ -17,6 +17,7 @@ public class UModel {
 	// back-end variables
 	private ArrayList<HashMap> vals;
 	private ArrayList<Channel> chans;
+	public ArrayList<String> queries;
 
 	public UModel(String name) {
 		this.name = name;

@@ -170,7 +170,7 @@ public class AAXLParser {
 		for (int i = 0; i < states.getLength(); i++) {
 			String stateName = states.item(i).getAttributes()
 					.getNamedItem("name").getNodeValue();
-			Location location = new Location(new DataPort(stateName,
+			Location location = new Location("bless",new DataPort(stateName,
 					new CompImpl("pController")));
 			location.setId(i + 1);
 			String tag = "";

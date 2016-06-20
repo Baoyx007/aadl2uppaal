@@ -24,14 +24,14 @@ public class UpaalWriter {
 
 	public void processUModel(UModel model) throws IOException {
 		out = new PrintWriter(outFile);
-		if (getInfo(model, out)) {
-			return;
-		}
+		//if (getInfo(model, out)) {
+		//	return;
+		//}
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
 		out.println("<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>");
 		out.println("<nta>");
 
-		// declaration 部分
+		//global declaration 部分
 
 		// channel 部分
 		out.print("<declaration>clock c;");
@@ -39,7 +39,8 @@ public class UpaalWriter {
 			out.printf("broadcast chan %s;", ch);
 		// 参数
 		out.println("const int PERIOD=2;\nconst int MAsize=3;\nconst int SR=3;\nconst int b=1;\nconst int start=0;\nconst int SB_Rate=-8;\nconst int EB_Rate=-10;\nconst double PI = 3.1415926;\n");
-		// normal_random
+
+        // normal_random
 		out.println("double normal_random()");
 		out.println("{");
 		out.println("double u = random(1);");
@@ -47,12 +48,32 @@ public class UpaalWriter {
 		out.println("double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);");
 		out.println("if(x&lt;0){return x*-1;}else{ return x;}}");
 
+		String normal_func="double Normal(double mu, double sigma){\n" +
+				"    double u = random(1);\n" +
+				"    double v = random(1);\n" +
+				"    double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);\n" +
+				"    double ret =  x*sigma + mu;\n" +
+				"    if(ret&lt;0)\n" +
+				"        return ret*-1;\n" +
+				"else\n" +
+				"    return ret;\n" +
+				"}";
+		out.println(normal_func);
+
+		String a_strategy = "\n" +
+				"double a_strategy(){\n" +
+				"    return  1.0;\n" +
+				"}";
+		out.print(a_strategy);
+
+
 		out.print(model.getDeclaration());
 		out.println("</declaration>");
 
 		// System.out.println("model.templates.size(): " +
 		// model.templates.size());
 
+        //process template
 		for (Template t : model.templates) {
 			out.println();
 			processTemplate(t, model);
@@ -84,12 +105,16 @@ public class UpaalWriter {
 
 		// declaration
 		out.println("<declaration>");
+
+		//local clock
+		//out.println("clock "+t+"_clock");
 		// 可以写在文件里
 		String clock = (t == model.getTopTemplate()) ? "c" : t.toString()
 				+ "_clock";
 		if (t != model.getTopTemplate())
 			out.printf("clock %s;%n", clock);
 		out.println();
+
 		out.print(t.declarations);
 		out.println("</declaration>");
 

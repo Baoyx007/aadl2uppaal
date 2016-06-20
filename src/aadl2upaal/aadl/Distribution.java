@@ -35,4 +35,25 @@ public class Distribution {
 		this.varName = varName;
 	}
 
+	@Override
+	public String toString() {
+		String ret="";
+		switch (distName){
+			case 0:
+				ret+="Normal(";
+				break;
+			case 1:
+				ret+="Uniform(";
+				break;
+			case 2:
+				ret+="Random(";
+				break;
+		}
+		for (Double v:paras){
+			ret+=String.valueOf(v)+",";
+		}
+		ret=ret.substring(0,ret.length()-1);
+		ret+=")";
+		return ret;
+	}
 }

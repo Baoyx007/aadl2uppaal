@@ -1,1 +1,5 @@
 *.class
+.idea
+.*
+bin/aadl2upaal/nondeterministic/
+bin/aadl2upaal/visitor/

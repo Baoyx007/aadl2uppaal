@@ -11,6 +11,7 @@ import aadl2upaal.aadl.Flow;
 import aadl2upaal.aadl.HybirdAnnex;
 import aadl2upaal.aadl.SubComp;
 import aadl2upaal.aadl.UncertaintyAnnex;
+import aadl2upaal.upaal.Template;
 
 public interface NodeVisitor {
 	public void processAADLModel(AADLModel model);
@@ -29,7 +30,7 @@ public interface NodeVisitor {
 
 	public void visit(HybirdAnnex ha);
 
-	public void visit(UncertaintyAnnex ua);
+	void visit(UncertaintyAnnex ua, Template t);
 
 	public void processCompImpl(CompImpl compImpl) throws Exception;
 

@@ -29,15 +29,15 @@ public class Template extends UNode {
 		this.impl = impl;
 	}
 
-	public Transition addTransition(Connection c) {
-		return addTransition(c.getSourcePort(), c.getSinkPort(), c.latency,
-				c.toString());
-	}
-
-	public Transition addTransition(Flow f) {
-		return addTransition(f.getSourcePort(), f.getSinkPort(), null,
-				f.toString());
-	}
+//	public Transition addTransition(Connection c) {
+//		return addTransition(c.getSourcePort(), c.getSinkPort(), c.latency,
+//				c.toString());
+//	}
+//
+//	public Transition addTransition(Flow f) {
+//		return addTransition(f.getSourcePort(), f.getSinkPort(), null,
+//				f.toString());
+//	}
 
 	public void addConnection(Channel from, Channel to) {
 		this.conn.put(from, to);
@@ -47,11 +47,11 @@ public class Template extends UNode {
 		this.chans.add(c);
 	}
 
-	public Transition addTransition(DataPort src, DataPort dst,
-			Integer latency, String name) {
-		return addTransition(new Location(src), new Location(dst), latency,
-				name);
-	}
+//	public Transition addTransition(DataPort src, DataPort dst,
+//			Integer latency, String name) {
+//		return addTransition(new Location(src), new Location(dst), latency,
+//				name);
+//	}
 
 	public Transition addTransition(Location src, Location dst,
 			Integer latency, String name) {
