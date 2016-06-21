@@ -1,15 +1,17 @@
 package aadl2upaal.aadl;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import aadl2upaal.upaal.Location;
 
 public class BLESSAnnex extends Annex {
 	private ArrayList<Location> locs;
 	private ArrayList<BTransition> trans;
-	private ArrayList<String> asserts;
+	//private ArrayList<String> asserts;
 	private ArrayList<AVar> invariant;
 	private ArrayList<BVar> variables;
+	public Map<String,String> asserts;
 
 	public BLESSAnnex(String name) {
 		super(name);
@@ -32,14 +34,14 @@ public class BLESSAnnex extends Annex {
 		this.trans = trans;
 	}
 
-	public ArrayList<String> getAsserts() {
-		return asserts;
-	}
+	//public ArrayList<String> getAsserts() {
+//		return asserts;
+//	}
 
-	public void setAsserts(ArrayList<String> asserts) {
-		this.asserts = asserts;
-	}
-
+//	public void setAsserts(ArrayList<String> asserts) {
+//		this.asserts = asserts;
+//	}
+//
 	public ArrayList<AVar> getInvariant() {
 		return invariant;
 	}

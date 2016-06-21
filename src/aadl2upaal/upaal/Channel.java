@@ -7,6 +7,7 @@ public class Channel extends UNode {
 	Flow flow;
 	private int direction = 0;
 	private String type = "";
+	public String value = "";
 
 	public Channel(String name, int direction, String type) {
 		super(name);

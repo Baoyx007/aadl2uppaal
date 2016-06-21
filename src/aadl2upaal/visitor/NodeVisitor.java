@@ -26,9 +26,10 @@ public interface NodeVisitor {
 
 	public void visit(ACompoent acomp);
 
-	public void visit(BLESSAnnex ba);
 
-	public void visit(HybirdAnnex ha);
+	void visit(HybirdAnnex ha, Template t);
+
+	void visit(BLESSAnnex ba, Template t);
 
 	void visit(UncertaintyAnnex ua, Template t);
 

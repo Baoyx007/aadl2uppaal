@@ -9,7 +9,6 @@ public class HybirdAnnex extends Annex {
 
 	public HybirdAnnex(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
 		this.variables = new ArrayList<AVar>();
 		this.constants = new ArrayList<AVar>();
 		this.behavior = new ArrayList<HybirdProcess>();

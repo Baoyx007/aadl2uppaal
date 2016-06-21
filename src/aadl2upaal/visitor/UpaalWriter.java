@@ -154,10 +154,11 @@ public class UpaalWriter {
 			if (tr.rec != null)
 				out.printf("<label kind=\"synchronisation\">%s?</label>%n",
 						tr.rec);
+			// chann 在synchronisation 和 assignment 都要加
 			if (tr.latency != null)
 				out.printf("<label kind=\"guard\">%s &lt; %d </label>%n",
 						clock, tr.latency);
-			if (tr.update() != null) {
+			if (tr.update != null) {
 				out.printf("<label kind=\"assignment\">%s </label>%n",
 						tr.update);
 			}

@@ -4,8 +4,9 @@ import java.util.HashMap;
 
 public class TypeMapping {
 	public HashMap<String, String> map = new HashMap<String, String>();
+	public static TypeMapping instance = new TypeMapping();
 
-	public TypeMapping() {
+	private TypeMapping() {
 		// TODO Auto-generated constructor stub
 		map.put("aadlinteger", "int");
 		map.put("aadlreal", "double");

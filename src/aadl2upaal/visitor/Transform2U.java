@@ -2,22 +2,9 @@ package aadl2upaal.visitor;
 
 import java.util.ArrayList;
 
-import aadl2upaal.aadl.AADLModel;
-import aadl2upaal.aadl.ACompoent;
-import aadl2upaal.aadl.ACompoentDeclare;
-import aadl2upaal.aadl.ACompoentImpl;
-import aadl2upaal.aadl.APort;
-import aadl2upaal.aadl.AProperties;
-import aadl2upaal.aadl.UVar;
-import aadl2upaal.aadl.BLESSAnnex;
-import aadl2upaal.aadl.CompImpl;
-import aadl2upaal.aadl.Connection;
-import aadl2upaal.aadl.DataPort;
-import aadl2upaal.aadl.Flow;
-import aadl2upaal.aadl.HybirdAnnex;
-import aadl2upaal.aadl.SubComp;
-import aadl2upaal.aadl.UncertaintyAnnex;
+import aadl2upaal.aadl.*;
 import aadl2upaal.upaal.*;
+
 
 public class Transform2U implements NodeVisitor {
 
@@ -26,6 +13,19 @@ public class Transform2U implements NodeVisitor {
     public Transform2U(UModel u) {
         // TODO Auto-generated constructor stub
         this.umodel = u;
+    }
+
+    public UModel transform(AADLModel amodel) {
+        if (umodel == null) {
+            umodel = new UModel(amodel.name);
+        }
+        //process compoents
+
+        //process impl
+
+        //process annex
+
+        return umodel;
     }
 
     @Override
@@ -133,16 +133,65 @@ public class Transform2U implements NodeVisitor {
     }
 
     @Override
-    public void visit(BLESSAnnex ba) {
-        // TODO Auto-generated method stub
-
+    public void visit(HybirdAnnex ha,Template t) {
+        //variables
+        for (AVar var : ha.getVariables()) {
+            t.declarations += TypeMapping.instance.getMappingType(var.getType()) + " " + var.getName() + ";\n";
+        }
     }
 
     @Override
-    public void visit(HybirdAnnex ha) {
-        // TODO Auto-generated method stub
+    public void visit(BLESSAnnex ba, Template t) {
+        // asserts and invariant is ignored
+
+        //variables
+        for (BVar var : ba.getVariables()) {
+            t.declarations += TypeMapping.instance.getMappingType(var.getType()) + " " + var.getName() + ";\n";
+        }
+        //states
+        t.locs.addAll(ba.getLocs());
+
+        //transition
+        for (BTransition transition : ba.getTrans()) {
+            transition.guard = parseExpression2Uppaal(transition.guard, ba.getVariables());
+            ArrayList<BUpdate> listOfUpdate = transition.getUpdate();
+
+            //将每个transition 中包含信道的action 扩展成多个transition
+            Transition template_trans = new Transition(transition.src, transition.dst, 0, transition.name);
+            template_trans.setGuard(transition.guard);
+            t.trans.add(template_trans);
+            boolean need_extend_trans = false;
+            int i=0;
+            for (BUpdate update : listOfUpdate) {
+                if (update.getPort() == null) {
+                    // need func to process this
+                    //(iSeg',nSeg',i',v',s',b',iMA':=iSeg, nSeg,i,v,s,b,iMA)
+                    if (template_trans.update.equals("")) {
+                        template_trans.update += update.getExpression();
+                    } else {
+                        template_trans.update += ", " + update.getExpression();
+                    }
+                } else {
+                    Channel channel = new Channel(update.getPort().getName(), update.getPort().getDirection(), "");
+                    if (need_extend_trans) {
+                        Location tmp_loc = new Location("tmp_loc_" + i, null);
+                        Transition tmp_trans = new Transition(tmp_loc, template_trans.dst, 0, "tmp_tans_" + i);
+                        tmp_trans.chann=channel;
+                        template_trans.dst=tmp_loc;
+                        template_trans=tmp_trans;
+                        t.trans.add(tmp_trans);
+                    } else {
+                        channel.value = update.getVar().getName();
+                        template_trans.chann = channel;
+                        need_extend_trans = true;
+                    }
+                }
+                i++;
+            }
+        }
 
     }
+
 
     @Override
     public void visit(UncertaintyAnnex ua, Template t) {
@@ -150,30 +199,30 @@ public class Transform2U implements NodeVisitor {
         t.declarations += "\n";
         for (UVar v : ua.getVars()) {
             t.declarations += "double " + v.getName() + ";\n";
-            t.declarations+="clock d_t";// for delay location
+            t.declarations += "clock d_t";// for delay location
             if (v.getType().equals("time")) {
                 //在前端插入一条边和一个location
                 int[] i = {0};
                 t.getTrans().stream().filter(trans -> trans.getSnd() != null && trans.getSnd().getName().endsWith(v.getApplied().getName())).forEach(trans -> {
                     Location delay_location = new Location("temp" + String.valueOf(i[0]), null);
-                    delay_location.invariant+="&& d_t<="+v.getName();
-                    Location src =trans.src;
-                    trans.src=delay_location;
-                    trans.setGuard("d_t>="+v.getName());
+                    delay_location.invariant += "&& d_t<=" + v.getName();
+                    Location src = trans.src;
+                    trans.src = delay_location;
+                    trans.setGuard("d_t>=" + v.getName());
 
                     src.setUrgent(true);
                     Transition delay_trans = new Transition(src, delay_location, 0, "");
-                    delay_trans.setGuard(v.getName()+"="+v.dist.toString()+";");
+                    delay_trans.setGuard(v.getName() + "=" + v.dist.toString() + ";");
                     delay_trans.setUpdate("d_t=0");
 
                     i[0]++;
                 });
             } else if (v.getType().equals("static price")) {
                 //在declaration 中初始化
-                String insertDeclared = v.getName()+"="+v.dist.toString()+";";
+                String insertDeclared = v.getName() + "=" + v.dist.toString() + ";";
                 int insertPosition = t.declarations.lastIndexOf("initialize(){");
-                t.declarations = t.declarations.substring(0,insertPosition)+insertDeclared+t.declarations.substring(insertPosition,t.declarations.length());
-            }else if(v.getType().equals("dynamic price")){
+                t.declarations = t.declarations.substring(0, insertPosition) + insertDeclared + t.declarations.substring(insertPosition, t.declarations.length());
+            } else if (v.getType().equals("dynamic price")) {
                 //TODO search all occurrence, and replace by distribution
 
             }
@@ -190,5 +239,9 @@ public class Transform2U implements NodeVisitor {
         // TODO Auto-generated method stub
         // 每个后端都添加一个空的initialize
 
+    }
+
+    private String parseExpression2Uppaal(String guard, ArrayList<BVar> variables) {
+        return guard;
     }
 }
