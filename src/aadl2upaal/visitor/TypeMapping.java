@@ -12,6 +12,10 @@ public class TypeMapping {
 		map.put("aadlreal", "double");
 		map.put("aadlinteger", "int");
 		map.put("aadlinteger", "int");
+
+		map.put("CTCS_Types::Velocity","clock");
+        map.put("CTCS_Types::Acceleration","clock");
+        map.put("CTCS_Types::Time","clock");
 	}
 
 	public String getMappingType(String str) {

@@ -8,7 +8,9 @@ public class HybirdProcess {
 	private ArrayList<HContinuous> evolutions;
 	private HInterrupt interrupt;
 	private ArrayList<Hassignment> asssigments;
-	private HybirdProcess repete = null;
+    public boolean isRepete=false;
+	public boolean isIinitial = false;
+    public HybirdProcess subProcess=null;
 
 	public String getName() {
 		return name;
@@ -50,12 +52,31 @@ public class HybirdProcess {
 		this.asssigments = asssigments;
 	}
 
-	public HybirdProcess getRepete() {
-		return repete;
-	}
+    public String getStringAssignment(){
+        String ret="";
+        boolean isFirst=true;
+        for(Hassignment ass:asssigments){
+            if(isFirst){
+                ret+=ass.toString();
+                isFirst=false;
+            }else{
+                ret+=", "+ass.toString();
+            }
+        }
+        return ret;
+    }
 
-	public void setRepete(HybirdProcess repete) {
-		this.repete = repete;
-	}
-	
+    public String getStringContinuous(){
+        String ret="";
+        boolean isFirst=true;
+        for(HContinuous con:this.evolutions){
+            if(isFirst){
+                ret+=con.toString();
+                isFirst=false;
+            }else{
+                ret+="&& "+con.toString();
+            }
+        }
+        return ret;
+    }
 }

@@ -133,11 +133,73 @@ public class Transform2U implements NodeVisitor {
     }
 
     @Override
-    public void visit(HybirdAnnex ha,Template t) {
-        //variables
+    public void visit(HybirdAnnex ha, Template t) {
+        //variables and constants
         for (AVar var : ha.getVariables()) {
             t.declarations += TypeMapping.instance.getMappingType(var.getType()) + " " + var.getName() + ";\n";
         }
+        for (AVar var : ha.getConstants()) {
+            t.declarations += TypeMapping.instance.getMappingType(var.getType()) + " " + var.getName() + ";\n";
+        }
+
+        //behavior
+        for (HybirdProcess process : ha.getBehavior()) {
+            //每个process 都是一个location
+            if (process.getSkip()) {
+                continue;
+            } else {
+                //不重复添加location
+                Location loc = null;
+                for (Location l : t.locs) {
+                    if (l.name.equals(process.getName())) {
+                        loc = l;
+                        break;
+                    }
+                }
+                if (loc == null) {
+                    loc = new Location(process.getName(), null);
+                }
+
+                t.locs.add(loc);
+                if (process.isIinitial) {
+                    loc.setInitial(true);
+                    loc.setUrgent(true);
+                    Location sub_process = new Location(process.subProcess.getName(), null);
+                    Transition transition = new Transition(loc, sub_process, 0, "");
+                    transition.setUpdate(process.getStringAssignment());
+                    transition.update += ",initialize()";
+                    t.trans.add(transition);
+
+                } else {
+                    loc.invariant += process.getStringContinuous().toString();
+                    Location original_loc=loc;
+                    //处理中断
+                    HInterrupt interrupt = process.getInterrupt();
+                    if (interrupt != null) {
+                        int i = 0;
+                        for (HCommunication comm : interrupt.getComm()) {
+                            //每个中断都会生成一条边和location
+                            Location int_loc = new Location("int" + String.valueOf(i), null);
+                            int_loc.setInvariant(process.getStringContinuous().toString());
+                            Transition add_trans = new Transition(loc, int_loc, 0, "");
+                            add_trans.chann = new Channel("c_" + comm.getP().getName(), comm.getP().getDirection(), "");
+                            add_trans.chann.value = comm.getVar().getName();
+                            t.trans.add(add_trans);
+                            t.locs.add(int_loc);
+                            loc=int_loc;
+                            i++;
+                        }
+                    }
+                    //处理loop
+                    if(process.isRepete){
+                        t.trans.get(t.trans.size()-1).dst=original_loc;
+                        t.locs.remove(t.locs.size()-1);
+                    }
+
+                }
+            }
+        }
+
     }
 
     @Override
@@ -161,7 +223,7 @@ public class Transform2U implements NodeVisitor {
             template_trans.setGuard(transition.guard);
             t.trans.add(template_trans);
             boolean need_extend_trans = false;
-            int i=0;
+            int i = 0;
             for (BUpdate update : listOfUpdate) {
                 if (update.getPort() == null) {
                     // need func to process this
@@ -172,13 +234,13 @@ public class Transform2U implements NodeVisitor {
                         template_trans.update += ", " + update.getExpression();
                     }
                 } else {
-                    Channel channel = new Channel(update.getPort().getName(), update.getPort().getDirection(), "");
+                    Channel channel = new Channel("c_"+update.getPort().getName(), update.getPort().getDirection(), "");
                     if (need_extend_trans) {
                         Location tmp_loc = new Location("tmp_loc_" + i, null);
                         Transition tmp_trans = new Transition(tmp_loc, template_trans.dst, 0, "tmp_tans_" + i);
-                        tmp_trans.chann=channel;
-                        template_trans.dst=tmp_loc;
-                        template_trans=tmp_trans;
+                        tmp_trans.chann = channel;
+                        template_trans.dst = tmp_loc;
+                        template_trans = tmp_trans;
                         t.trans.add(tmp_trans);
                     } else {
                         channel.value = update.getVar().getName();

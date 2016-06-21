@@ -10,9 +10,11 @@ public class Location {
 	public boolean isUrgent = false;
 	public Integer id = null;
 	public String invariant = "";
+	public String name="";
 
 	public Location(String name,DataPort port) {
 		this.port = port;
+        this.name = name;
 	}
 	public Location(DataPort port){
 		this.port = port;
