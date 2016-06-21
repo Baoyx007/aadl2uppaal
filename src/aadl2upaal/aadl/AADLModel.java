@@ -12,13 +12,14 @@ public class AADLModel extends ANode {
 	private ArrayList<DataPort> ports = null;
 	private BlessAutoMata ba = new BlessAutoMata();
 	private HybirdAnnex ha ;
-	private ArrayList<ACompoent> comps =null;
+	public ArrayList<ACompoent> comps =null;
 
 	public AADLModel(String name) {
 		super(name);
 		connections = new ArrayList<Connection>();
 		ports = new ArrayList<DataPort>();
 		flows = new ArrayList<Flow>();
+		comps = new ArrayList<ACompoent>();
 	}
 
 	public ArrayList<DataPort> getPorts() {

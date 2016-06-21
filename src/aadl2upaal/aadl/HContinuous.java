@@ -22,8 +22,6 @@ public class HContinuous {
 	}
 
 	public void setRank(int rank) {
-
-
 		this.rank = rank;
 	}
 

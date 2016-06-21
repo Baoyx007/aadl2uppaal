@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
-<declaration>clock c;broadcast chan none_conn_position;broadcast chan none_conn_velocity;broadcast chan none_conn_acc;broadcast chan none_conn_req;broadcast chan none_conn_ma;broadcast chan none_conn_ea;const int PERIOD=2;
+<declaration>clock c;urgent chan c_ts;
+urgent chan c_tv;
+urgent chan c_ta;
+urgent chan c_r;
+urgent chan c_m;
+urgent chan c_ea;
+double v_ts;
+clock v_tv;
+clock v_ta;
+double v_m;
+double v_ea;
+const int PERIOD=2;
 const int MAsize=3;
 const int SR=3;
 const int b=1;
@@ -34,63 +45,70 @@ double a_strategy(){
 <template>
 <name>Train</name>
 <declaration>
-clock Train_clock;
 
+void initialize(){
+ }double s;
+clock v;
+clock a;
+clock t;
+double fr;
 </declaration>
 <location id="id1">
-<name>Train_ts</name>
-<label kind="invariant"> </label>
+<name>Train</name>
+<label kind="invariant">s'==v&amp;&amp; v'==a+fr&amp;&amp; t'==1 </label>
 </location>
 
 <location id="id2">
-<name>pController_ps</name>
-<label kind="invariant"> </label>
+<name>int0</name>
+<label kind="invariant">s'==v&amp;&amp; v'==a+fr&amp;&amp; t'==1 </label>
 </location>
 
 <location id="id3">
-<name>Train_tv</name>
-<label kind="invariant"> </label>
+<name>int1</name>
+<label kind="invariant">s'==v&amp;&amp; v'==a+fr&amp;&amp; t'==1 </label>
 </location>
 
 <location id="id4">
-<name>pController_pv</name>
+<name>RunningTrain</name>
 <label kind="invariant"> </label>
+<urgent/>
 </location>
 
-<location id="id5">
-<name>pController_pa</name>
-<label kind="invariant"> </label>
-</location>
+<init ref="id4"/>
 
-<location id="id6">
-<name>Train_ta</name>
-<label kind="invariant"> </label>
-</location>
-
-<init ref="id6"/>
-
-<!-- none_conn_position -->
+<!--  -->
 <transition>
 <source ref="id1"/>
 <target ref="id2"/>
-<label kind="synchronisation">none_conn_position!</label>
-<label kind="assignment"> </label>
+<label kind="synchronisation">c_ts!</label>
+<label kind="guard" ></label>
+<label kind="assignment">v_ts=s </label>
 </transition>
 
-<!-- none_conn_velocity -->
-<transition>
-<source ref="id6"/>
-<target ref="id1"/>
-<label kind="synchronisation">none_conn_velocity!</label>
-<label kind="assignment"> </label>
-</transition>
-
-<!-- none_conn_acc -->
+<!--  -->
 <transition>
 <source ref="id2"/>
-<target ref="id6"/>
-<label kind="synchronisation">none_conn_acc?</label>
-<label kind="assignment"> </label>
+<target ref="id3"/>
+<label kind="synchronisation">c_tv!</label>
+<label kind="guard" ></label>
+<label kind="assignment">v_tv=v </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id3"/>
+<target ref="id1"/>
+<label kind="synchronisation">c_ta?</label>
+<label kind="guard" ></label>
+<label kind="assignment">a= v_ta </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id4"/>
+<target ref="id1"/>
+<label kind="guard" ></label>
+<label kind="assignment">v=0, v=0, v=0,initialize() </label>
 </transition>
 
 </template>
@@ -99,231 +117,312 @@ clock Train_clock;
 <template>
 <name>RBC</name>
 <declaration>
-clock RBC_clock;
 
+void initialize(){
+ }
+double r_delay;
+clock d_t;
 </declaration>
 <location id="id1">
-<name>pController_pr</name>
+<name>M</name>
 <label kind="invariant"> </label>
 </location>
 
 <location id="id2">
-<name>RBC_r</name>
+<name>EA</name>
 <label kind="invariant"> </label>
 </location>
 
 <location id="id3">
-<name>RBC_m</name>
+<name>R</name>
 <label kind="invariant"> </label>
+<urgent/>
 </location>
 
 <location id="id4">
-<name>pController_pm</name>
-<label kind="invariant"> </label>
+<name>temp0</name>
+<label kind="invariant"> d_t &lt;=r_delay </label>
 </location>
 
-<location id="id5">
-<name>RBC_ea</name>
-<label kind="invariant"> </label>
-</location>
+<init ref="id1"/>
 
-<location id="id6">
-<name>pController_pea</name>
-<label kind="invariant"> </label>
-</location>
+<!--  -->
+<transition>
+<source ref="id1"/>
+<target ref="id2"/>
+<label kind="synchronisation">c_m?</label>
+<label kind="guard" ></label>
+<label kind="assignment">m= v_m </label>
+</transition>
 
-<init ref="id4"/>
+<!--  -->
+<transition>
+<source ref="id2"/>
+<target ref="id3"/>
+<label kind="synchronisation">c_ea?</label>
+<label kind="guard" ></label>
+<label kind="assignment">ea= v_ea </label>
+</transition>
 
-<!-- none_conn_req -->
+<!--  -->
 <transition>
 <source ref="id4"/>
-<target ref="id5"/>
-<label kind="synchronisation">none_conn_req?</label>
-<label kind="assignment"> </label>
+<target ref="id1"/>
+<label kind="synchronisation">c_r!</label>
+<label kind="guard" >d_t &gt;=r_delay</label>
+<label kind="assignment">v_r=r </label>
 </transition>
 
-<!-- none_conn_ma -->
+<!--  -->
 <transition>
-<source ref="id6"/>
+<source ref="id3"/>
 <target ref="id4"/>
-<label kind="synchronisation">none_conn_ma!</label>
-<label kind="assignment"> </label>
-</transition>
-
-<!-- none_conn_ea -->
-<transition>
-<source ref="id5"/>
-<target ref="id6"/>
-<label kind="synchronisation">none_conn_ea!</label>
-<label kind="assignment"> </label>
+<label kind="guard" ></label>
+<label kind="assignment">d_t=0,r_delay=Normal(0.1,0.05) </label>
 </transition>
 
 </template>
 
 
 <template>
-<name>pController</name>
+<name>controller</name>
 <declaration>
-clock pController_clock;
 
+void initialize(){
+ }double i;
+double b;
+clock v;
+double s;
+double e;
+double iMA;
+double iSeg;
+clock xl;
 </declaration>
 <location id="id1">
-<name>pController_READY</name>
+<name>READY</name>
 <label kind="invariant"> </label>
 </location>
 
 <location id="id2">
-<name>pController_GMA</name>
+<name>GMA</name>
 <label kind="invariant"> </label>
-<committed/>
 </location>
 
 <location id="id3">
-<name>pController_CMA</name>
+<name>CMA</name>
 <label kind="invariant"> </label>
+<committed/>
 </location>
 
 <location id="id4">
-<name>pController_RETRY</name>
+<name>RETRY</name>
 <label kind="invariant"> </label>
+<committed/>
 </location>
 
 <location id="id5">
-<name>pController_MFR</name>
+<name>MFR</name>
 <label kind="invariant"> </label>
-<committed/>
 </location>
 
 <location id="id6">
-<name>pController_CMF</name>
+<name>CMF</name>
 <label kind="invariant"> </label>
+<committed/>
 </location>
 
 <location id="id7">
-<name>pController_SBI</name>
+<name>SBI</name>
 <label kind="invariant"> </label>
-<committed/>
 </location>
 
 <location id="id8">
-<name>pController_CSB</name>
-<label kind="invariant"> </label>
-</location>
-
-<location id="id9">
-<name>pController_EBI</name>
+<name>CSB</name>
 <label kind="invariant"> </label>
 <committed/>
 </location>
 
+<location id="id9">
+<name>EBI</name>
+<label kind="invariant"> </label>
+</location>
+
 <location id="id10">
-<name>pController_STOP</name>
+<name>STOP</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id11">
+<name>tmp_loc_1</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id12">
+<name>tmp_loc_1</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id13">
+<name>tmp_loc_1</name>
 <label kind="invariant"> </label>
 </location>
 
 <init ref="id1"/>
 
-<!-- T0_go -->
+<!-- null -->
 <transition>
 <source ref="id1"/>
 <target ref="id2"/>
-<label kind="assignment"> </label>
+<label kind="synchronisation">c_r!</label>
+<label kind="guard" ></label>
+<label kind="assignment">v_r= </label>
 </transition>
 
-<!-- T1_MA_Check -->
+<!-- null -->
 <transition>
 <source ref="id2"/>
-<target ref="id3"/>
-<label kind="assignment"> </label>
+<target ref="id11"/>
+<label kind="synchronisation">c_m?</label>
+<label kind="guard" ></label>
+<label kind="assignment">iMA= v_m </label>
 </transition>
 
-<!-- T2_MA_Ok -->
+<!-- tmp_tans_1 -->
+<transition>
+<source ref="id11"/>
+<target ref="id3"/>
+<label kind="synchronisation">c_ea?</label>
+<label kind="guard" ></label>
+<label kind="assignment">= v_ea </label>
+</transition>
+
+<!-- null -->
 <transition>
 <source ref="id3"/>
 <target ref="id5"/>
-<label kind="assignment"> </label>
+<label kind="guard" >iMA!=null</label>
+<label kind="assignment">update() </label>
 </transition>
 
-<!-- T3_Move_Check -->
+<!-- null -->
 <transition>
 <source ref="id5"/>
-<target ref="id6"/>
-<label kind="assignment"> </label>
+<target ref="id12"/>
+<label kind="synchronisation">c_tv?</label>
+<label kind="guard" ></label>
+<label kind="assignment">v= v_tv </label>
 </transition>
 
-<!-- T4_SBI_Point -->
+<!-- tmp_tans_1 -->
+<transition>
+<source ref="id12"/>
+<target ref="id6"/>
+<label kind="synchronisation">c_ts?</label>
+<label kind="guard" ></label>
+<label kind="assignment">= v_ts </label>
+</transition>
+
+<!-- null -->
 <transition>
 <source ref="id6"/>
 <target ref="id7"/>
-<label kind="assignment"> </label>
+<label kind="synchronisation">c_ta!</label>
+<label kind="guard" >ot ((s=CTCS_Properties::start) or ((v &lt; iSeg.v2))) or not ((s=CTCS_Properties::start) or  ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v2] + (2*b*iSeg.e)))))</label>
+<label kind="assignment">v_ta=0.8update() </label>
 </transition>
 
-<!-- T5_Move_Ok -->
+<!-- null -->
 <transition>
 <source ref="id6"/>
 <target ref="id5"/>
-<label kind="assignment"> </label>
+<label kind="synchronisation">c_ta!</label>
+<label kind="guard" >( (s=CTCS_Properties::start) or ((v &lt; iSeg.v2))) or  (((v**2) + (2*b*s)) &lt; (iMA[nSeg.v2] + (2*b*iSeg.e)))</label>
+<label kind="assignment">v_ta=xlupdate() </label>
 </transition>
 
-<!-- T6_SBI_Check -->
+<!-- null -->
 <transition>
 <source ref="id7"/>
-<target ref="id8"/>
-<label kind="assignment"> </label>
+<target ref="id13"/>
+<label kind="synchronisation">c_ts?</label>
+<label kind="guard" ></label>
+<label kind="assignment">s= v_ts </label>
 </transition>
 
-<!-- T7_SBI_Out -->
+<!-- tmp_tans_1 -->
+<transition>
+<source ref="id13"/>
+<target ref="id8"/>
+<label kind="synchronisation">c_tv?</label>
+<label kind="guard" ></label>
+<label kind="assignment">= v_tv </label>
+</transition>
+
+<!-- null -->
 <transition>
 <source ref="id8"/>
 <target ref="id5"/>
-<label kind="assignment"> </label>
+<label kind="synchronisation">c_ta!</label>
+<label kind="guard" >((s=CTCS_Properties::start) or ((v &lt; iSeg.v2))) and ((s=CTCS_Properties::start) or ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v2] + (2*b*iSeg.e)))))</label>
+<label kind="assignment">v_ta=xlupdate() </label>
 </transition>
 
-<!-- T8_SBI_Ok -->
+<!-- null -->
 <transition>
 <source ref="id8"/>
 <target ref="id7"/>
-<label kind="assignment"> </label>
+<label kind="guard" >not (((s=CTCS_Properties::start) or ((v &lt; iSeg.v2))) and ((s=CTCS_Properties::start) or ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v2] + (2*b*iSeg.e))))))</label>
+<label kind="assignment">update() </label>
 </transition>
 
-<!-- T9_MA_NotOk -->
+<!-- null -->
 <transition>
 <source ref="id3"/>
 <target ref="id4"/>
+<label kind="guard" >iMA=null</label>
 <label kind="assignment"> </label>
 </transition>
 
-<!-- T10_MA_Retry -->
+<!-- null -->
 <transition>
 <source ref="id4"/>
 <target ref="id2"/>
-<label kind="assignment"> </label>
+<label kind="guard" ></label>
+<label kind="assignment">update() </label>
 </transition>
 
-<!-- T11_EBI_Point -->
-<transition>
-<source ref="id6"/>
-<target ref="id9"/>
-<label kind="assignment"> </label>
-</transition>
-
-<!-- T12_Stop -->
+<!-- null -->
 <transition>
 <source ref="id9"/>
 <target ref="id10"/>
+<label kind="guard" >v==0</label>
 <label kind="assignment"> </label>
 </transition>
 
-<!-- T13_EBI_Point -->
+<!-- null -->
+<transition>
+<source ref="id6"/>
+<target ref="id9"/>
+<label kind="synchronisation">c_ta!</label>
+<label kind="guard" >not (v &lt; iSeg.v1) or not ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v1] + (2*b*iSeg.e))))</label>
+<label kind="assignment">v_ta=bupdate() </label>
+</transition>
+
+<!-- null -->
 <transition>
 <source ref="id7"/>
 <target ref="id9"/>
-<label kind="assignment"> </label>
+<label kind="synchronisation">c_ta!</label>
+<label kind="guard" >not (v &lt; iSeg.v1) or not ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v1] + (2*b*iSeg.e))))</label>
+<label kind="assignment">v_ta=bupdate() </label>
 </transition>
 
 </template>
 
-<system> system Train,RBC,pController;</system>
+<system> system Train,RBC,controller;</system>
 <queries>
+<query>
+<formula>Pr[&lt;=300](&lt;&gt; v&lt;=0 &amp;&amp;  s&lt;6000 &amp;&amp; s&gt;0</formula>
+</query>
 </queries>
 </nta>

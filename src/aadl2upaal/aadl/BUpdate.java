@@ -9,6 +9,12 @@ public class BUpdate {
 		return expression;
 	}
 
+	public BUpdate(String expression, APort port, AVar var) {
+		this.expression = expression;
+		this.port = port;
+		this.var = var;
+	}
+
 	public void setExpression(String expression) {
 		this.expression = expression;
 	}

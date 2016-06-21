@@ -4,13 +4,18 @@ import java.util.ArrayList;
 
 public class HybirdProcess {
 	private String name;
-	private Boolean skip;
+	private Boolean skip=false;
 	private ArrayList<HContinuous> evolutions;
 	private HInterrupt interrupt;
 	private ArrayList<Hassignment> asssigments;
     public boolean isRepete=false;
 	public boolean isIinitial = false;
     public HybirdProcess subProcess=null;
+
+    public HybirdProcess(){
+        evolutions = new ArrayList<HContinuous>();
+        asssigments = new ArrayList<Hassignment>();
+    }
 
 	public String getName() {
 		return name;
@@ -74,7 +79,7 @@ public class HybirdProcess {
                 ret+=con.toString();
                 isFirst=false;
             }else{
-                ret+="&& "+con.toString();
+                ret+="&amp;&amp; "+con.toString();
             }
         }
         return ret;

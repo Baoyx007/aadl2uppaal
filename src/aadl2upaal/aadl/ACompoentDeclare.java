@@ -6,18 +6,17 @@ import aadl2upaal.visitor.NodeVisitor;
 
 public class ACompoentDeclare extends ANode {
 
-	private ArrayList<APort> ports;
+	public ArrayList<APort> ports;
 	private ArrayList<AProperties> props;
 
 	public ACompoentDeclare(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
+	    ports = new ArrayList<APort>();
 	}
 
 	@Override
 	public void accept(NodeVisitor visitor) {
-		// TODO Auto-generated method stub
-
+		visitor.visit(this);
 	}
 
 	public ArrayList<APort> getPorts() {

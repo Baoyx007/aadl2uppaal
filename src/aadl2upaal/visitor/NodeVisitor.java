@@ -1,16 +1,6 @@
 package aadl2upaal.visitor;
 
-import aadl2upaal.aadl.AADLModel;
-import aadl2upaal.aadl.ACompoent;
-import aadl2upaal.aadl.ACompoentImpl;
-import aadl2upaal.aadl.BLESSAnnex;
-import aadl2upaal.aadl.CompImpl;
-import aadl2upaal.aadl.Connection;
-import aadl2upaal.aadl.DataPort;
-import aadl2upaal.aadl.Flow;
-import aadl2upaal.aadl.HybirdAnnex;
-import aadl2upaal.aadl.SubComp;
-import aadl2upaal.aadl.UncertaintyAnnex;
+import aadl2upaal.aadl.*;
 import aadl2upaal.upaal.Template;
 
 public interface NodeVisitor {
@@ -32,7 +22,8 @@ public interface NodeVisitor {
 	void visit(BLESSAnnex ba, Template t);
 
 	void visit(UncertaintyAnnex ua, Template t);
-
+	void visit(ACompoentDeclare declare);
+	void visit(ACompoentImpl impl);
 	public void processCompImpl(CompImpl compImpl) throws Exception;
 
 	// public void processEnd2EndFlow(End2EndFlow eflow) {}

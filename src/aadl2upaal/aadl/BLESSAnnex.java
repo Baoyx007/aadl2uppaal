@@ -15,7 +15,10 @@ public class BLESSAnnex extends Annex {
 
 	public BLESSAnnex(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
+		locs = new ArrayList<Location>();
+        trans = new ArrayList<BTransition>();
+        invariant = new ArrayList<AVar>();
+        variables = new ArrayList<BVar>();
 	}
 
 	public ArrayList<Location> getLocs() {

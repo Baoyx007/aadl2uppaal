@@ -6,6 +6,10 @@ public class HInterrupt {
 	private HybirdProcess end;
 	private ArrayList<HCommunication> comm;
 
+	public HInterrupt(){
+        comm = new ArrayList<HCommunication>();
+    }
+
 	public HybirdProcess getEnd() {
 		return end;
 	}

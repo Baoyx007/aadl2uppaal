@@ -1,19 +1,22 @@
 package aadl2upaal.aadl;
 
-public class Annex {
-	private String name;
+import aadl2upaal.visitor.NodeVisitor;
 
-	public Annex(String name) {
-		super();
-		this.name = name;
-	}
+public  class Annex {
+    private String name;
 
-	public String getName() {
-		return name;
-	}
+    public Annex(String name) {
+        super();
+        this.name = name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }

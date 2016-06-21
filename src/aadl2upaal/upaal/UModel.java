@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
+import aadl2upaal.aadl.AVar;
 import aadl2upaal.aadl.CompImpl;
 import aadl2upaal.aadl.Flow;
 
@@ -16,12 +17,16 @@ public class UModel {
 	private String declaration = "";
 	// back-end variables
 	private ArrayList<HashMap> vals;
-	private ArrayList<Channel> chans;
+	public ArrayList<AVar> values;
+	public ArrayList<Channel> chans;
 	public ArrayList<String> queries;
 
 	public UModel(String name) {
 		this.name = name;
 		this.vals = new ArrayList<>();
+        this.values = new ArrayList<AVar>();
+        this.chans = new ArrayList<Channel>();
+        this.queries = new ArrayList<String>();
 	}
 
 	public Template addTemplate(Flow f) {

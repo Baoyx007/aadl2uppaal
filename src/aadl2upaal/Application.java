@@ -5,6 +5,8 @@ import java.io.File;
 import aadl2upaal.aadl.AADLModel;
 import aadl2upaal.nondeterministic.NondeterParser;
 import aadl2upaal.parser.AAXLParser;
+import aadl2upaal.upaal.UModel;
+import aadl2upaal.visitor.Transform2U;
 import aadl2upaal.visitor.UpaalGenerator;
 import aadl2upaal.visitor.UpaalWriter;
 
@@ -22,14 +24,17 @@ public class Application {
 		System.out.println("AADL model created successfully");
 
 		// ×ª»»
-		UpaalGenerator gen = new UpaalGenerator();
-		gen.processAADLModel(aadlModel);
-		System.out.println("Generating Upaal model from AADL model");
+		//old version
+		//UpaalGenerator gen = new UpaalGenerator();
+		//gen.processAADLModel(aadlModel);
+
+        UModel uModel = new Transform2U(aadlModel).transform();
+        System.out.println("Generating Upaal model from AADL model");
 
 		// uppaal xml
 		UpaalWriter writer = new UpaalWriter(new File(args[1]));
 		System.out.println("Writing Upaal model to: " + args[1]);
-		writer.processUModel(gen.uModel);
+		writer.processUModel(uModel);
 		System.out.println("Upaal model written successfully");
 	}
 }

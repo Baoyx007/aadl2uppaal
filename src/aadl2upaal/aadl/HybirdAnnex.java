@@ -1,5 +1,7 @@
 package aadl2upaal.aadl;
 
+import aadl2upaal.visitor.NodeVisitor;
+
 import java.util.ArrayList;
 
 public class HybirdAnnex extends Annex {

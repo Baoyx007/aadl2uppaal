@@ -10,7 +10,9 @@ public class UncertaintyAnnex extends Annex {
 
 	public UncertaintyAnnex(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
+		vars = new ArrayList<UVar>();
+		queries = new ArrayList<String>();
+		dists  = new ArrayList<Distribution>();
 	}
 
 	public ArrayList<UVar> getVars() {

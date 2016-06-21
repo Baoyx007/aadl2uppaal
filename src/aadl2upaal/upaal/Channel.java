@@ -15,7 +15,15 @@ public class Channel extends UNode {
 		this.type = type;
 	}
 
-	Channel(Flow f) {
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    Channel(Flow f) {
 		flow = f;
 	}
 

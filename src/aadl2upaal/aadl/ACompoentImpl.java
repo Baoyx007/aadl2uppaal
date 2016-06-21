@@ -11,13 +11,13 @@ public class ACompoentImpl extends ANode {
 
 	public ACompoentImpl(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
+		conns = new ArrayList<Connection>();
+        annexs = new ArrayList<Annex>();
 	}
 
 	@Override
 	public void accept(NodeVisitor visitor) {
-		// TODO Auto-generated method stub
-
+        visitor.visit(this);
 	}
 
 	public ArrayList<Connection> getConns() {
