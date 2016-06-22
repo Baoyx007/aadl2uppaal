@@ -64,12 +64,22 @@ public class UpaalWriter {
                 "    double v = random(1);\n" +
                 "    double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);\n" +
                 "    double ret =  x*sigma + mu;\n" +
-                "    if(ret&lt;0)\n" +
-                "        return ret*-1;\n" +
-                "else\n" +
                 "    return ret;\n" +
                 "}";
         out.println(normal_func);
+
+        out.println();
+        String normal_time_func = "double Time_Normal(double mu, double sigma){\n" +
+                "    double u = random(1);\n" +
+                "    double v = random(1);\n" +
+                "    double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);\n" +
+                "    double ret =  x*sigma + mu;\n" +
+                "    if(ret&lt;0)\n" +
+                "        return 0;\n" +
+                "else\n" +
+                "    return ret;\n" +
+                "}";
+        out.println(normal_time_func);
 
         out.println();
         String uniform = "double Uniform(int rangeLow, int rangeHigh) {\n" +

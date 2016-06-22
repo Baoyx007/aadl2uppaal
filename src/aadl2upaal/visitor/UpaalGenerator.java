@@ -9,7 +9,6 @@ import aadl2upaal.aadl.Connection;
 import aadl2upaal.aadl.Flow;
 import aadl2upaal.aadl.FlowElem;
 import aadl2upaal.aadl.SubComp;
-import aadl2upaal.nondeterministic.NondeterParser;
 import aadl2upaal.upaal.Template;
 import aadl2upaal.upaal.Transition;
 import aadl2upaal.upaal.UModel;
@@ -132,18 +131,7 @@ public class UpaalGenerator {
 		this.uModel = uModel;
 	}
 
-	public void processNondeterministic(NondeterParser nondeter) {
-		uModel.setDeclaration(nondeter.getDeclaration());
-		for(Template t:uModel.getTemplates()){
-			if(t.getImpl().getName().equals("RBC")){
-				t.setDeclarations(nondeter.getRBCDeclaration());
-			}else if(t.getImpl().getName().equals("Train")){
-				t.setDeclarations(nondeter.getTrainDeclaration());
-			}else{
-				t.setDeclarations(nondeter.getControllerDeclaration());
-			}
-		}
-	}
+
 
 	// public static void main(String args[]) throws Exception {
 	// if (args.length < 1) {

@@ -3,7 +3,6 @@ package aadl2upaal;
 import java.io.File;
 
 import aadl2upaal.aadl.AADLModel;
-import aadl2upaal.nondeterministic.NondeterParser;
 import aadl2upaal.parser.AAXLParser;
 import aadl2upaal.upaal.UModel;
 import aadl2upaal.visitor.Transform2U;

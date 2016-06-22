@@ -198,7 +198,7 @@ public final class Utils {
         UncertaintyAnnex ua_train = new UncertaintyAnnex("");
         UVar v_delay = new UVar("v_delay", "time");
         Distribution normal_train = new Distribution();
-        normal_train.setDistName(Distribution.Normal);
+        normal_train.setDistName(Distribution.TimeNormal);
         ArrayList<Double> params_train = new ArrayList<>();
         params_train.add(0.15);
         params_train.add(0.04);

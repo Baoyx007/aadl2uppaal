@@ -35,8 +35,16 @@ double Normal(double mu, double sigma){
     double v = random(1);
     double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);
     double ret =  x*sigma + mu;
+    return ret;
+}
+
+double Time_Normal(double mu, double sigma){
+    double u = random(1);
+    double v = random(1);
+    double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);
+    double ret =  x*sigma + mu;
     if(ret&lt;0)
-        return ret*-1;
+        return 0;
 else
     return ret;
 }
@@ -183,7 +191,7 @@ clock d_t;
 <source ref="id1"/>
 <target ref="id5"/>
 <label kind="guard" ></label>
-<label kind="assignment">d_t=0,v_delay=Normal(0.15,0.04) </label>
+<label kind="assignment">d_t=0,v_delay=Time_Normal(0.15,0.04) </label>
 </transition>
 
 </template>

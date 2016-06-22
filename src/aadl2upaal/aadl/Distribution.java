@@ -8,6 +8,7 @@ public class Distribution {
     public static int Random = 2;
     public static int Posion = 3;
     public static int exp = 4;
+    public static int TimeNormal=5;
 
     private UVar varName;
     private int distName;
@@ -55,6 +56,9 @@ public class Distribution {
                 break;
             case 4:
                 ret += "Expon(";
+                break;
+            case 5:
+                ret +="Time_Normal(";
                 break;
         }
         for (Double v : paras) {
