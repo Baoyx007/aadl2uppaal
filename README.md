@@ -31,7 +31,7 @@ The tool has two parts: i) XMI parser for AADL model, ii) AADL2UPPAAL Translator
        * JAVA 1.8.0
        * UPPAAL 4.1.19
 
-## The structure of the current folder:
+## The structure of the src folder:
 
    The aadl2upaal folder in src has the following five directories and one file.
 	

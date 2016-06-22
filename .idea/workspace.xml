@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4a9590df-9f95-46a8-858a-674c97791394" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/aadl2upaal/nondeterministic/NondeterParser.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/Application.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/Application.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/aadl/Distribution.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/aadl/Distribution.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/parser/Utils.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/parser/Utils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalGenerator.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/examples/MA_with_U_uppaal.xml" afterPath="$PROJECT_DIR$/src/examples/MA_with_U_uppaal.xml" />
     </list>
     <ignored path="aadl2uppaal.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -115,7 +107,7 @@
           <provider editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="FIRST">
               <first_editor relative-caret-position="119">
-                <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+                <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -1167,7 +1159,7 @@
       <provider editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="FIRST">
           <first_editor relative-caret-position="119">
-            <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+            <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
             <folding />
           </first_editor>
           <second_editor />
