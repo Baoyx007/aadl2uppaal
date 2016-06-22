@@ -7,7 +7,7 @@ urgent chan c_ta;
 urgent chan c_r;
 urgent chan c_m;
 urgent chan c_ea;
-double v_ts;
+clock v_ts;
 clock v_tv;
 clock v_ta;
 double v_m;
@@ -21,12 +21,15 @@ const int SB_Rate=-8;
 const int EB_Rate=-10;
 const double PI = 3.1415926;
 
+//------------Lib for Distributions-------------------------
+
 double normal_random()
 {
 double u = random(1);
 double v = random(1);
 double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);
 if(x&lt;0){return x*-1;}else{ return x;}}
+
 double Normal(double mu, double sigma){
     double u = random(1);
     double v = random(1);
@@ -38,29 +41,88 @@ else
     return ret;
 }
 
+double Uniform(int rangeLow, int rangeHigh) {
+    double myRand = random(32767)/(1.0 + 32767); 
+    int range = rangeHigh - rangeLow + 1;
+    double myRand_scaled = (myRand * range *1.0) + rangeLow;
+    return myRand_scaled;
+}
+
+int Poisson(double expectedValue) {
+  int n = 0; //counter of iteration
+  double limit; 
+  double x;  //pseudo random number
+  limit = exp(-expectedValue);
+  x = random(32767) / 32767; 
+  while (x &gt; limit) {
+    n++;
+    x = x* ( random(32767) / 32767);
+  }
+  return n;
+}
+
+double Expon(double x)
+{
+  double z;                     // Uniform random number (0 &lt; z  &lt; 1 )
+  double exp_value;             // Computed exponential value to be returned
+
+  // Pull a uniform random number (0 &lt;  z &lt; 1 )
+  do
+  {
+    z = random(1);
+  }
+  while ((z == 0) || (z == 1));
+
+  // Compute exponential random variable using inversion method
+  exp_value = -x * log(z);
+
+  return(exp_value);
+}
+
 double a_strategy(){
     return  1.0;
-}</declaration>
+}
+typedef struct
+{
+    int ModeTypes;
+    int v1;
+    int v2;
+    int e;
+}Segment;
+int iSeg,nSeg;
+
+typedef struct 
+{
+    Segment seg[MAsize];
+}MovementAuthority;
+
+MovementAuthority iMA;
+</declaration>
 
 <template>
 <name>Train</name>
 <declaration>
 
 void initialize(){
- }double s;
+ }clock s;
 clock v;
 clock a;
 clock t;
 double fr;
+
+double v_delay;
+clock d_t;
 </declaration>
 <location id="id1">
 <name>Train</name>
 <label kind="invariant">s'==v&amp;&amp; v'==a+fr&amp;&amp; t'==1 </label>
+<urgent/>
 </location>
 
 <location id="id2">
 <name>int0</name>
 <label kind="invariant">s'==v&amp;&amp; v'==a+fr&amp;&amp; t'==1 </label>
+<urgent/>
 </location>
 
 <location id="id3">
@@ -74,14 +136,19 @@ double fr;
 <urgent/>
 </location>
 
+<location id="id5">
+<name>temp0</name>
+<label kind="invariant">s'==v&amp;&amp; v'==a+fr&amp;&amp; t'==1 &amp;&amp; d_t &lt;=v_delay </label>
+</location>
+
 <init ref="id4"/>
 
 <!--  -->
 <transition>
-<source ref="id1"/>
+<source ref="id5"/>
 <target ref="id2"/>
 <label kind="synchronisation">c_ts!</label>
-<label kind="guard" ></label>
+<label kind="guard" >d_t &gt;=v_delay</label>
 <label kind="assignment">v_ts=s </label>
 </transition>
 
@@ -109,6 +176,14 @@ double fr;
 <target ref="id1"/>
 <label kind="guard" ></label>
 <label kind="assignment">v=0, v=0, v=0,initialize() </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id1"/>
+<target ref="id5"/>
+<label kind="guard" ></label>
+<label kind="assignment">d_t=0,v_delay=Normal(0.15,0.04) </label>
 </transition>
 
 </template>
@@ -152,7 +227,7 @@ clock d_t;
 <target ref="id2"/>
 <label kind="synchronisation">c_m?</label>
 <label kind="guard" ></label>
-<label kind="assignment">m= v_m </label>
+<label kind="assignment">v_m= v_m </label>
 </transition>
 
 <!--  -->
@@ -161,7 +236,7 @@ clock d_t;
 <target ref="id3"/>
 <label kind="synchronisation">c_ea?</label>
 <label kind="guard" ></label>
-<label kind="assignment">ea= v_ea </label>
+<label kind="assignment">v_ea= v_ea </label>
 </transition>
 
 <!--  -->
@@ -170,7 +245,7 @@ clock d_t;
 <target ref="id1"/>
 <label kind="synchronisation">c_r!</label>
 <label kind="guard" >d_t &gt;=r_delay</label>
-<label kind="assignment">v_r=r </label>
+<label kind="assignment"> </label>
 </transition>
 
 <!--  -->
@@ -189,14 +264,36 @@ clock d_t;
 <declaration>
 
 void initialize(){
- }double i;
+ }void update(){return;}double i;
 double b;
-clock v;
+double v;
 double s;
 double e;
-double iMA;
-double iSeg;
-clock xl;
+double xl;
+
+
+bool guard_0(){ return not ((s==0) or ((v &lt; iMA.seg[iSeg].v2))) or not ((s==0) or  ((((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v2 + (2*b*iMA.seg[iSeg].e)))));}
+
+
+
+bool guard_1(){ return ( (s==0) or ((v &lt; iMA.seg[iSeg].v2))) or  (((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v2 + (2*b*iMA.seg[iSeg].e)));}
+
+
+
+bool guard_2(){ return ((s==0) or ((v &lt; iMA.seg[iSeg].v2))) and ((s==0) or ((((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v2 + (2*b*iMA.seg[iSeg].e)))));}
+
+
+
+bool guard_3(){ return not (((s==0) or ((v &lt; iMA.seg[iSeg].v2))) and ((s==0) or ((((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v2 + (2*b*iMA.seg[iSeg].e))))));}
+
+
+
+bool guard_4(){ return not (v &lt; iMA.seg[iSeg].v1) or not ((((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v1 + (2*b*iMA.seg[iSeg].e))));}
+
+
+
+bool guard_5(){ return not (v &lt; iMA.seg[iSeg].v1) or not ((((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v1 + (2*b*iMA.seg[iSeg].e))));}
+
 </declaration>
 <location id="id1">
 <name>READY</name>
@@ -253,17 +350,17 @@ clock xl;
 </location>
 
 <location id="id11">
-<name>tmp_loc_1</name>
+<name>extra_loc_0</name>
 <label kind="invariant"> </label>
 </location>
 
 <location id="id12">
-<name>tmp_loc_1</name>
+<name>extra_loc_1</name>
 <label kind="invariant"> </label>
 </location>
 
 <location id="id13">
-<name>tmp_loc_1</name>
+<name>extra_loc_2</name>
 <label kind="invariant"> </label>
 </location>
 
@@ -275,7 +372,7 @@ clock xl;
 <target ref="id2"/>
 <label kind="synchronisation">c_r!</label>
 <label kind="guard" ></label>
-<label kind="assignment">v_r= </label>
+<label kind="assignment"> </label>
 </transition>
 
 <!-- null -->
@@ -284,23 +381,23 @@ clock xl;
 <target ref="id11"/>
 <label kind="synchronisation">c_m?</label>
 <label kind="guard" ></label>
-<label kind="assignment">iMA= v_m </label>
+<label kind="assignment"> </label>
 </transition>
 
-<!-- tmp_tans_1 -->
+<!-- tmp_tans_0 -->
 <transition>
 <source ref="id11"/>
 <target ref="id3"/>
 <label kind="synchronisation">c_ea?</label>
 <label kind="guard" ></label>
-<label kind="assignment">= v_ea </label>
+<label kind="assignment"> </label>
 </transition>
 
 <!-- null -->
 <transition>
 <source ref="id3"/>
 <target ref="id5"/>
-<label kind="guard" >iMA!=null</label>
+<label kind="guard" >iMA.seg[0].v1!=0</label>
 <label kind="assignment">update() </label>
 </transition>
 
@@ -319,7 +416,7 @@ clock xl;
 <target ref="id6"/>
 <label kind="synchronisation">c_ts?</label>
 <label kind="guard" ></label>
-<label kind="assignment">= v_ts </label>
+<label kind="assignment"> </label>
 </transition>
 
 <!-- null -->
@@ -327,8 +424,8 @@ clock xl;
 <source ref="id6"/>
 <target ref="id7"/>
 <label kind="synchronisation">c_ta!</label>
-<label kind="guard" >ot ((s=CTCS_Properties::start) or ((v &lt; iSeg.v2))) or not ((s=CTCS_Properties::start) or  ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v2] + (2*b*iSeg.e)))))</label>
-<label kind="assignment">v_ta=0.8update() </label>
+<label kind="guard" >guard_0()</label>
+<label kind="assignment">v_ta=0.8, update() </label>
 </transition>
 
 <!-- null -->
@@ -336,8 +433,8 @@ clock xl;
 <source ref="id6"/>
 <target ref="id5"/>
 <label kind="synchronisation">c_ta!</label>
-<label kind="guard" >( (s=CTCS_Properties::start) or ((v &lt; iSeg.v2))) or  (((v**2) + (2*b*s)) &lt; (iMA[nSeg.v2] + (2*b*iSeg.e)))</label>
-<label kind="assignment">v_ta=xlupdate() </label>
+<label kind="guard" >guard_1()</label>
+<label kind="assignment">v_ta=xl, update() </label>
 </transition>
 
 <!-- null -->
@@ -349,13 +446,13 @@ clock xl;
 <label kind="assignment">s= v_ts </label>
 </transition>
 
-<!-- tmp_tans_1 -->
+<!-- tmp_tans_2 -->
 <transition>
 <source ref="id13"/>
 <target ref="id8"/>
 <label kind="synchronisation">c_tv?</label>
 <label kind="guard" ></label>
-<label kind="assignment">= v_tv </label>
+<label kind="assignment"> </label>
 </transition>
 
 <!-- null -->
@@ -363,15 +460,15 @@ clock xl;
 <source ref="id8"/>
 <target ref="id5"/>
 <label kind="synchronisation">c_ta!</label>
-<label kind="guard" >((s=CTCS_Properties::start) or ((v &lt; iSeg.v2))) and ((s=CTCS_Properties::start) or ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v2] + (2*b*iSeg.e)))))</label>
-<label kind="assignment">v_ta=xlupdate() </label>
+<label kind="guard" >guard_2()</label>
+<label kind="assignment">v_ta=xl, update() </label>
 </transition>
 
 <!-- null -->
 <transition>
 <source ref="id8"/>
 <target ref="id7"/>
-<label kind="guard" >not (((s=CTCS_Properties::start) or ((v &lt; iSeg.v2))) and ((s=CTCS_Properties::start) or ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v2] + (2*b*iSeg.e))))))</label>
+<label kind="guard" >guard_3()</label>
 <label kind="assignment">update() </label>
 </transition>
 
@@ -379,7 +476,7 @@ clock xl;
 <transition>
 <source ref="id3"/>
 <target ref="id4"/>
-<label kind="guard" >iMA=null</label>
+<label kind="guard" >iMA.seg[0].v1!=0</label>
 <label kind="assignment"> </label>
 </transition>
 
@@ -404,8 +501,8 @@ clock xl;
 <source ref="id6"/>
 <target ref="id9"/>
 <label kind="synchronisation">c_ta!</label>
-<label kind="guard" >not (v &lt; iSeg.v1) or not ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v1] + (2*b*iSeg.e))))</label>
-<label kind="assignment">v_ta=bupdate() </label>
+<label kind="guard" >guard_4()</label>
+<label kind="assignment">v_ta=b, update() </label>
 </transition>
 
 <!-- null -->
@@ -413,8 +510,8 @@ clock xl;
 <source ref="id7"/>
 <target ref="id9"/>
 <label kind="synchronisation">c_ta!</label>
-<label kind="guard" >not (v &lt; iSeg.v1) or not ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v1] + (2*b*iSeg.e))))</label>
-<label kind="assignment">v_ta=bupdate() </label>
+<label kind="guard" >guard_5()</label>
+<label kind="assignment">v_ta=b, update() </label>
 </transition>
 
 </template>

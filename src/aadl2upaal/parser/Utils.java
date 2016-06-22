@@ -195,6 +195,20 @@ public final class Utils {
         ACompoentImpl train_impl = new ACompoentImpl("Train");
         train_impl.getAnnexs().add(hybirdAnnex);
 
+        UncertaintyAnnex ua_train = new UncertaintyAnnex("");
+        UVar v_delay = new UVar("v_delay", "time");
+        Distribution normal_train = new Distribution();
+        normal_train.setDistName(Distribution.Normal);
+        ArrayList<Double> params_train = new ArrayList<>();
+        params_train.add(0.15);
+        params_train.add(0.04);
+        normal_train.setParas(params_train);
+        v_delay.setApplied(ts);
+        v_delay.dist = normal_train;
+        ua_train.getVars().add(v_delay);
+        ua_train.getDists().add(normal_train);
+        train_impl.getAnnexs().add(ua_train);
+
         train.setCompoentImpl(train_impl);
 
         //rbc
@@ -240,10 +254,10 @@ public final class Utils {
         BLESSAnnex ba = new BLESSAnnex("");
         BVar i = new BVar("i", "Base_Types::Integer");
         BVar b = new BVar("b", "CTCS_Types::Deceleration");
-        BVar v = new BVar("v", "CTCS_Types::Velocity");
-        BVar s = new BVar("s", "CTCS_Types::Position");
+        BVar v = new BVar("v", "CTCS_Types::");
+        BVar s = new BVar("s", "CTCS_Types::");
         BVar e = new BVar("e", "CTCS_Types::EOA");
-        BVar xl = new BVar("xl", "CTCS_Types::Acceleration");
+        BVar xl = new BVar("xl", "CTCS_Types::");
         BVar iMA = new BVar("iMA", "CTCS_Types::MovementAuthority");
         BVar iSeg = new BVar("iSeg", "CTCS_Types::Segment");
         ba.getVariables().add(i);
@@ -326,7 +340,7 @@ public final class Utils {
         bt = new BTransition();
         bt.setSrc(CMF);
         bt.setDst(SBI);
-        bt.setGuard("ot ((s=CTCS_Properties::start) or ((v &lt; iSeg.v2))) or not ((s=CTCS_Properties::start) or  ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v2] + (2*b*iSeg.e)))))");
+        bt.setGuard("not ((s=CTCS_Properties::start) or ((v &lt; iSeg.v2))) or not ((s=CTCS_Properties::start) or  ((((v**2) + (2*b*s)) &lt; (iMA[nSeg.v2] + (2*b*iSeg.e)))))");
         bu = new ArrayList<>();
         ta.setDirection(APort.out);
         bu.add(new BUpdate(null, ta, new AVar("0.8", "")));
@@ -376,7 +390,7 @@ public final class Utils {
         bt = new BTransition();
         bt.setSrc(CMA);
         bt.setDst(RETRY);
-        bt.setGuard("iMA=null");
+        bt.setGuard("iMA==null");
         bu = new ArrayList<>();
         bt.setUpdate(bu);
         ba.getTrans().add(bt);

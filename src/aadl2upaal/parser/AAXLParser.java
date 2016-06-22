@@ -62,7 +62,8 @@ public class AAXLParser {
 
         getHybird(model);
         System.out.println("parsed aadl xml to model");
-        model = Utils.getMockModel(aaxlFile.getName());
+        if (aaxlFile.getName().contains("MA"))
+            model = Utils.getMockModel(aaxlFile.getName());
         return model;
     }
 

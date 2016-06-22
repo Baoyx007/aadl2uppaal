@@ -47,7 +47,6 @@ public class AADLModel extends ANode {
 	}
 
 	public void accept(NodeVisitor visitor) {
-		visitor.processAADLModel(this);
 	}
 
 	public List<Flow> getFlows() {

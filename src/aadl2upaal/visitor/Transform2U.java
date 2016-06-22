@@ -1,6 +1,8 @@
 package aadl2upaal.visitor;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import aadl2upaal.aadl.*;
 import aadl2upaal.upaal.*;
@@ -21,20 +23,11 @@ public class Transform2U implements NodeVisitor {
     public UModel transform() {
         //process compoents
 
-        //process impl
-
-        //process annex
         for (ACompoent comp : amodel.comps) {
             comp.getCompoentDeclare().accept(this);
             comp.getCompoentImpl().accept(this);
         }
         return umodel;
-    }
-
-    @Override
-    public void processAADLModel(AADLModel model) {
-        // TODO Auto-generated method stub
-
     }
 
 
@@ -95,11 +88,6 @@ public class Transform2U implements NodeVisitor {
 
     }
 
-    @Override
-    public void processFlow(Flow flow) {
-        // TODO Auto-generated method stub
-
-    }
 
     @Override
     public void processSubComp(SubComp comp) {
@@ -196,6 +184,9 @@ public class Transform2U implements NodeVisitor {
                             int_loc.setInvariant(process.getStringContinuous().toString());
                             Transition add_trans = new Transition(loc, int_loc, 0, "");
                             add_trans.chann = new Channel("c_" + comm.getP().getName(), comm.getDirection(), "");
+                            if (comm.getDirection() == APort.out) {
+                                loc.setUrgent(true);
+                            }
                             add_trans.chann.value = comm.getVar().getName();
                             t.trans.add(add_trans);
                             t.locs.add(int_loc);
@@ -218,17 +209,33 @@ public class Transform2U implements NodeVisitor {
     @Override
     public void visit(BLESSAnnex ba, Template t) {
         // asserts and invariant is ignored
-
+        t.declarations += "void update(){return;}";
         //variables
         for (BVar var : ba.getVariables()) {
+            if (var.getName().equals("iMA") || var.getName().equals("iSeg")) {
+                continue;
+            }
             t.declarations += TypeMapping.instance.getMappingType(var.getType()) + " " + var.getName() + ";\n";
         }
         //states
         t.locs.addAll(ba.getLocs());
 
         //transition
+        int i = 0;
+        int j = 0;
         for (BTransition transition : ba.getTrans()) {
-            transition.guard = parseExpression2Uppaal(transition.guard, ba.getVariables());
+            //transition.guard
+            String tmp_guard = parseExpression2Uppaal(transition.guard, ba.getVariables());
+            if (tmp_guard.contains("*")) {
+                String func = "\n\nbool guard_" + String.valueOf(j) + "(){ return " + tmp_guard + ";}\n\n";
+                t.declarations += func;
+                transition.guard = "guard_" + String.valueOf(j) + "()";
+                j++;
+            } else {
+                transition.guard = tmp_guard;
+            }
+
+
             ArrayList<BUpdate> listOfUpdate = transition.getUpdate();
 
             //将每个transition 中包含信道的action 扩展成多个transition
@@ -236,12 +243,11 @@ public class Transform2U implements NodeVisitor {
             template_trans.setGuard(transition.guard);
             t.trans.add(template_trans);
             boolean need_extend_trans = false;
-            int i = 0;
             for (BUpdate update : listOfUpdate) {
                 if (update.getPort() == null) {
                     // need func to process this
                     //(iSeg',nSeg',i',v',s',b',iMA':=iSeg, nSeg,i,v,s,b,iMA)
-                    if (template_trans.update.equals("")) {
+                    if (template_trans.update.length() <= 0) {
                         template_trans.update += update.getExpression();
                     } else {
                         template_trans.update += ", " + update.getExpression();
@@ -249,22 +255,26 @@ public class Transform2U implements NodeVisitor {
                 } else {
                     Channel channel = new Channel("c_" + update.getPort().getName(), update.getPort().getDirection(), "");
                     if (need_extend_trans) {
-                        Location tmp_loc = new Location("tmp_loc_" + i, null);
+                        Location tmp_loc = new Location("extra_loc_" + i, null);
                         Transition tmp_trans = new Transition(tmp_loc, template_trans.dst, 0, "tmp_tans_" + i);
                         tmp_trans.chann = channel;
                         template_trans.dst = tmp_loc;
                         template_trans = tmp_trans;
                         t.locs.add(tmp_loc);
                         t.trans.add(tmp_trans);
+                        i++;
                     } else {
                         if (update.getVar() != null) {
-                            channel.value = update.getVar().getName();
+                            if (update.getVar().getName().contains("iMA")) {
+                                ;
+                            } else {
+                                channel.value = update.getVar().getName();
+                            }
                         }
                         template_trans.chann = channel;
                         need_extend_trans = true;
                     }
                 }
-                i++;
             }
         }
 
@@ -284,12 +294,12 @@ public class Transform2U implements NodeVisitor {
                 Location delay_location = null;
                 Transition delay_trans = null;
                 for (Transition trans : t.getTrans()) {
-                    if (trans.dst != null && trans.chann.getName().endsWith(v.getApplied().getName())) {
+                    if (trans.chann != null && trans.chann.getName().endsWith(v.getApplied().getName())) {
                         delay_location = new Location("temp" + String.valueOf(i[0]), null);
-                        if (delay_location.invariant == "") {
-                            delay_location.invariant += " d_t &lt;=" + v.getName();
+                        if (trans.dst.invariant == "") {
+                            delay_location.invariant = " d_t &lt;=" + v.getName();
                         } else {
-                            delay_location.invariant += "&amp;&amp; d_t &lt;=" + v.getName();
+                            delay_location.invariant = trans.dst.invariant + " &amp;&amp; d_t &lt;=" + v.getName();
                         }
                         Location src = trans.src;
                         trans.src = delay_location;
@@ -378,7 +388,7 @@ public class Transform2U implements NodeVisitor {
                         start.setInitial(true);
                         lastTranstion = new Transition(start, null, 0, "");
                         lastTranstion.chann = new Channel("c_" + p.getName(), p.getDirection(), "");
-                        lastTranstion.chann.value = p.getName();
+                        lastTranstion.chann.value = "v_" + p.getName();
                         isStart = false;
                         template.locs.add(start);
                         template.trans.add(lastTranstion);
@@ -387,7 +397,7 @@ public class Transform2U implements NodeVisitor {
                         lastTranstion.dst = tmp_loc;
                         lastTranstion = new Transition(tmp_loc, null, 0, "");
                         lastTranstion.chann = new Channel("c_" + p.getName(), p.getDirection(), "");
-                        lastTranstion.chann.value = p.getName();
+                        lastTranstion.chann.value = "v_" + p.getName();
                         template.trans.add(lastTranstion);
                         template.locs.add(tmp_loc);
                     }
@@ -398,7 +408,12 @@ public class Transform2U implements NodeVisitor {
                     lastTranstion.dst = tmp_loc;
                     lastTranstion = new Transition(tmp_loc, null, 0, "");
                     lastTranstion.chann = new Channel("c_" + p.getName(), p.getDirection(), "");
-                    lastTranstion.chann.value = p.getName();
+                    if (p.getClass() == AEventPort.class) {
+                        lastTranstion.chann.value = "";
+                    } else {
+                        lastTranstion.chann.value = "v_" + p.getName();
+                    }
+
                     template.trans.add(lastTranstion);
                     template.locs.add(tmp_loc);
                 }
@@ -409,14 +424,55 @@ public class Transform2U implements NodeVisitor {
         umodel.addTemplate(template);
     }
 
-    @Override
-    public void processCompImpl(CompImpl compImpl) throws Exception {
-        // TODO Auto-generated method stub
-        // 每个后端都添加一个空的initialize
-
-    }
 
     private String parseExpression2Uppaal(String guard, ArrayList<BVar> variables) {
+
+        Pattern compile = Pattern.compile("(\\w)\\*\\*2");
+        Matcher matcher = compile.matcher(guard);
+        if (matcher.find()) {
+            guard = matcher.replaceAll(matcher.group(1) + "*" + matcher.group(1));
+        }
+//        guard.replaceAll("\\*2",guard.indexOf());
+
+        compile = Pattern.compile("iMA.=null");
+        matcher = compile.matcher(guard);
+        if (matcher.find()) {
+            guard = matcher.replaceAll("iMA.seg[0].v1!=0");
+        }
+
+        compile = Pattern.compile("iSeg");
+        matcher = compile.matcher(guard);
+        if (matcher.find()) {
+            guard = matcher.replaceAll("iMA.seg[iSeg]");
+        }
+
+        compile = Pattern.compile("\\[nSeg\\.(.*?)\\]");
+        matcher = compile.matcher(guard);
+        if (matcher.find()) {
+            guard = matcher.replaceAll(".seg[nSeg]." + matcher.group(1));
+        }
+
+        compile = Pattern.compile("CTCS_Properties::start");
+        matcher = compile.matcher(guard);
+        if (matcher.find()) {
+            guard = matcher.replaceAll("=0");
+        }
+
+//        compile = Pattern.compile("or");
+//        matcher = compile.matcher(guard);
+//        if (matcher.find()) {
+//            guard = matcher.replaceAll("||");
+//        }
+//        compile = Pattern.compile("and");
+//        matcher = compile.matcher(guard);
+//        if (matcher.find()) {
+//            guard = matcher.replaceAll("&amp;&amp;");
+//        }
+//        compile = Pattern.compile("not");
+//        matcher = compile.matcher(guard);
+//        if (matcher.find()) {
+//            guard = matcher.replaceAll("!");
+//        }
         return guard;
     }
 }

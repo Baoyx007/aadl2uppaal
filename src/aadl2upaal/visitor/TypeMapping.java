@@ -14,6 +14,7 @@ public class TypeMapping {
 		map.put("aadlinteger", "int");
 
 		map.put("CTCS_Types::Velocity","clock");
+		map.put("CTCS_Types::Position","clock");
         map.put("CTCS_Types::Acceleration","clock");
         map.put("CTCS_Types::Time","clock");
 	}

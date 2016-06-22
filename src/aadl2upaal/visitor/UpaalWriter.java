@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 
 import aadl2upaal.aadl.APort;
-import aadl2upaal.aadl.AType;
 import aadl2upaal.aadl.AVar;
 import aadl2upaal.upaal.Channel;
 import aadl2upaal.upaal.Location;
@@ -49,13 +48,16 @@ public class UpaalWriter {
         // 参数
         out.println("const int PERIOD=2;\nconst int MAsize=3;\nconst int SR=3;\nconst int b=1;\nconst int start=0;\nconst int SB_Rate=-8;\nconst int EB_Rate=-10;\nconst double PI = 3.1415926;\n");
 
+        out.println("//------------Lib for Distributions-------------------------");
         // normal_random
+        out.println();
         out.println("double normal_random()");
         out.println("{");
         out.println("double u = random(1);");
         out.println("double v = random(1);");
         out.println("double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);");
         out.println("if(x&lt;0){return x*-1;}else{ return x;}}");
+        out.println();
 
         String normal_func = "double Normal(double mu, double sigma){\n" +
                 "    double u = random(1);\n" +
@@ -69,12 +71,72 @@ public class UpaalWriter {
                 "}";
         out.println(normal_func);
 
+        out.println();
+        String uniform = "double Uniform(int rangeLow, int rangeHigh) {\n" +
+                "    double myRand = random(32767)/(1.0 + 32767); \n" +
+                "    int range = rangeHigh - rangeLow + 1;\n" +
+                "    double myRand_scaled = (myRand * range *1.0) + rangeLow;\n" +
+                "    return myRand_scaled;\n" +
+                "}";
+        out.println(uniform);
+        out.println();
+
+
+        String possion_func = "int Poisson(double expectedValue) {\n" +
+                "  int n = 0; //counter of iteration\n" +
+                "  double limit; \n" +
+                "  double x;  //pseudo random number\n" +
+                "  limit = exp(-expectedValue);\n" +
+                "  x = random(32767) / 32767; \n" +
+                "  while (x &gt; limit) {\n" +
+                "    n++;\n" +
+                "    x = x* ( random(32767) / 32767);\n" +
+                "  }\n" +
+                "  return n;\n" +
+                "}";
+        out.println(possion_func);
+
+        out.println();
+        String expon_func = "double Expon(double x)\n" +
+                "{\n" +
+                "  double z;                     // Uniform random number (0 &lt; z  &lt; 1 )\n" +
+                "  double exp_value;             // Computed exponential value to be returned\n" +
+                "\n" +
+                "  // Pull a uniform random number (0 &lt;  z &lt; 1 )\n" +
+                "  do\n" +
+                "  {\n" +
+                "    z = random(1);\n" +
+                "  }\n" +
+                "  while ((z == 0) || (z == 1));\n" +
+                "\n" +
+                "  // Compute exponential random variable using inversion method\n" +
+                "  exp_value = -x * log(z);\n" +
+                "\n" +
+                "  return(exp_value);\n" +
+                "}";
+        out.println(expon_func);
+
         String a_strategy = "\n" +
                 "double a_strategy(){\n" +
                 "    return  1.0;\n" +
                 "}";
-        out.print(a_strategy);
+        out.println(a_strategy);
 
+        out.println("typedef struct\n" +
+                "{\n" +
+                "    int ModeTypes;\n" +
+                "    int v1;\n" +
+                "    int v2;\n" +
+                "    int e;\n" +
+                "}Segment;\n" +
+                "int iSeg,nSeg;\n" +
+                "\n" +
+                "typedef struct \n" +
+                "{\n" +
+                "    Segment seg[MAsize];\n" +
+                "}MovementAuthority;\n" +
+                "\n" +
+                "MovementAuthority iMA;");
 
         out.print(model.getDeclaration());
         out.println("</declaration>");
@@ -174,23 +236,29 @@ public class UpaalWriter {
             if (tr.chann != null) {
                 if (tr.chann.getDirection() == APort.in) {
                     out.printf("<label kind=\"synchronisation\">%s?</label>%n", tr.chann.getName());
-                    update += tr.chann.value + "= v_" + tr.chann.getName().substring(2);
+                    if (tr.chann.value.length() != 0)
+                        update += tr.chann.value + "= v_" + tr.chann.getName().substring(2);
                 } else {
                     out.printf("<label kind=\"synchronisation\">%s!</label>%n", tr.chann.getName());
-                    update += "v_" + tr.chann.getName().substring(2) + "=" + tr.chann.value;
+                    if (tr.chann.value.length() != 0)
+                        update += "v_" + tr.chann.getName().substring(2) + "=" + tr.chann.value;
                 }
             }
             // chann 在synchronisation 和 assignment 都要加
             //if (tr.latency != null)
             //	out.printf("<label kind=\"guard\">%s &lt; %d </label>%n",
             //			clock, tr.latency);
-            if(tr.getGuard()!=null){
+            if (tr.getGuard() != null) {
                 out.printf("<label kind=\"guard\" >%s</label>\n",
                         tr.getGuard());
 
             }
             if (tr.update != null) {
-                update += tr.update;
+                if (update.length() > 0 && tr.update.length() > 0) {
+                    update += ", " + tr.update;
+                } else {
+                    update += tr.update;
+                }
             }
             out.printf("<label kind=\"assignment\">%s </label>%n",
                     update);
@@ -201,21 +269,21 @@ public class UpaalWriter {
         out.println("</template>");
     }
 
-    private boolean getInfo(UModel model, PrintWriter out2) throws IOException {
-        if (model.name.contains("MA")) {
-            File file = new File("src/examples",
-                    "test4.xml");
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String tempstr = "";
-            while ((tempstr = br.readLine()) != null) {
-                out.println(tempstr);
-            }
-            br.close();
-            out.flush();
-            out.close();
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    private boolean getInfo(UModel model, PrintWriter out2) throws IOException {
+//        if (model.name.contains("MA")) {
+//            File file = new File("",
+//                    "");
+//            BufferedReader br = new BufferedReader(new FileReader(file));
+//            String tempstr = "";
+//            while ((tempstr = br.readLine()) != null) {
+//                out.println(tempstr);
+//            }
+//            br.close();
+//            out.flush();
+//            out.close();
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 }

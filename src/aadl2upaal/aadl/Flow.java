@@ -25,7 +25,6 @@ public class Flow extends ANode implements FlowElem {
 	}
 
 	public void accept(NodeVisitor visitor) {
-		visitor.processFlow(this);
 	}
 
 	public String fullName() {
