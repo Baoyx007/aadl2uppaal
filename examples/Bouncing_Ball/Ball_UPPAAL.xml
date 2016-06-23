@@ -133,25 +133,7 @@ clock d_t;
 	<system> system Ball;</system>
 	<queries>
 		<query>
-			<formula>simulate 5 [&lt;=10] {Ball.v}
-			</formula>
-			<comment>
-			</comment>
-		</query>
-		<query>
-			<formula>simulate 5 [&lt;=10] {Ball.x}
-			</formula>
-			<comment>
-			</comment>
-		</query>
-		<query>
 			<formula>Pr[&lt;=2] (&lt;&gt; Ball.x&lt;5 &amp;&amp; Ball.v &lt;-1)
-			</formula>
-			<comment>
-			</comment>
-		</query>
-		<query>
-			<formula>Pr[&lt;=1] (&lt;&gt; Ball.x&lt;5 &amp;&amp; Ball.v &lt;-1)
 			</formula>
 			<comment>
 			</comment>
