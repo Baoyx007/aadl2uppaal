@@ -435,6 +435,83 @@ public final class Utils {
         controller.setCompoentImpl(controller_impl);
         return model;
     }
+    public static AADLModel getMockModel2(String name) {
+        AADLModel sys = new AADLModel(name);
+        ACompoent ball = new ACompoent("Ball");
 
+        sys.comps.add(ball);
+
+        ACompoentDeclare declare = new ACompoentDeclare("Train");
+        ball.setCompoentDeclare(declare);
+
+        HybirdAnnex hybirdAnnex = new HybirdAnnex("");
+        hybirdAnnex.getVariables().add(new AVar("x", "BLESS_Types::Real"));
+        hybirdAnnex.getVariables().add(new AVar("v", "BLESS_Types::Real"));
+        hybirdAnnex.getVariables().add(new AVar("g", ""));
+        HConstant c = new HConstant("c", "");
+        c.setInitVal(0.7);
+        hybirdAnnex.getConstants().add(c);
+
+        HybirdProcess Ball = new HybirdProcess();
+        Ball.setName("Ball");
+        Ball.isRepete = true;
+        HybirdProcess Start = new HybirdProcess();
+        Start.setName("Start");
+        Start.isIinitial = true;
+        hybirdAnnex.getBehavior().add(Ball);
+        hybirdAnnex.getBehavior().add(Start);
+
+        HContinuous hContinuous;
+        hContinuous = new HContinuous();
+        hContinuous.setRank(1);
+        hContinuous.setLeft(new AVar("x", ""));
+        hContinuous.setRight(new AVar("v", ""));
+        Ball.getEvolutions().add(hContinuous);
+        hContinuous = new HContinuous();
+        hContinuous.setRank(1);
+        hContinuous.setLeft(new AVar("v", ""));
+        hContinuous.setRight(new AVar("g", ""));
+        Ball.getEvolutions().add(hContinuous);
+
+        Hassignment hassignment = new Hassignment();
+        hassignment.setVal(10);
+        hassignment.setVar(new AVar("x", ""));
+        Start.getAsssigments().add(hassignment);
+        hassignment = new Hassignment();
+        hassignment.setVal(0);
+        hassignment.setVar(new AVar("v", ""));
+        Start.getAsssigments().add(hassignment);
+        hassignment.right="-c*v ";
+        hassignment.setVar(new AVar("v", ""));
+        Ball.getAsssigments().add(hassignment);
+        Start.subProcess = Ball;
+
+        HChoice hChoice = new HChoice();
+        hChoice.guard=" x&lt;=0 and v&lt;=0 ";
+        hChoice.end=Ball;
+        Ball.choice = hChoice;
+
+        ACompoentImpl ball_impl = new ACompoentImpl("Ball");
+        ball_impl.getAnnexs().add(hybirdAnnex);
+
+
+        UncertaintyAnnex ua_ball = new UncertaintyAnnex("");
+        UVar u_g = new UVar("u_g", "static price");
+        Distribution normal_ball = new Distribution();
+        normal_ball.setDistName(Distribution.Normal);
+        ArrayList<Double> params_ball = new ArrayList<>();
+        params_ball.add(-9.8);
+        params_ball.add(0.3);
+        normal_ball.setParas(params_ball);
+        u_g.applied_var="g";
+        u_g.dist = normal_ball;
+
+        ua_ball.getVars().add(u_g);
+        ua_ball.getDists().add(normal_ball);
+        ball_impl.getAnnexs().add(ua_ball);
+
+        ball.setCompoentImpl(ball_impl);
+        return sys;
+    }
 
 }

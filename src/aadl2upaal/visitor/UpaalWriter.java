@@ -32,7 +32,7 @@ public class UpaalWriter {
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
         out.println("<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>");
         out.println("<nta>");
-
+        out.flush();
         //global declaration 部分
 
         // channel 部分

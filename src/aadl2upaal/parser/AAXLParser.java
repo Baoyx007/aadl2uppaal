@@ -46,6 +46,9 @@ public class AAXLParser {
         // model.flows.add(f);
         // }
 
+        if (aaxlFile.getName().contains("Ball")) {
+            return Utils.getMockModel2(aaxlFile.getName());
+        }
         AADLModel model = new AADLModel(aaxlFile.getName());
         model.setAsystem(getSystem());
 
@@ -62,8 +65,12 @@ public class AAXLParser {
 
         getHybird(model);
         System.out.println("parsed aadl xml to model");
-        if (aaxlFile.getName().contains("MA"))
+        if (aaxlFile.getName().contains("MA")) {
             model = Utils.getMockModel(aaxlFile.getName());
+        }
+        if (aaxlFile.getName().contains("Ball")) {
+            model = Utils.getMockModel2(aaxlFile.getName());
+        }
         return model;
     }
 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aadl2:Package xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadl2="http://aadl.info/AADL/2.0" xmlns:hybrid="http://www.aadl.org/hybrid/xtext/Hybrid" name="Bouncing_Ball" publicSection="#//@ownedPublicSection">
+  <ownedPublicSection importedUnit="aadl2:PropertySet ../../Plugin_Resources/BLESS.aadl#BLESS aadl2:Package ../../Plugin_Resources/BLESS_Types.aadl#BLESS_Types">
+    <ownedClassifier xsi:type="aadl2:SystemType" name="sys_ball"/>
+    <ownedClassifier xsi:type="aadl2:SystemImplementation" name="sys_ball.impl">
+      <ownedRealization implemented="#//@ownedPublicSection/@ownedClassifier.0"/>
+      <ownedAbstractSubcomponent name="Ball" abstractSubcomponentType="#//@ownedPublicSection/@ownedClassifier.3"/>
+    </ownedClassifier>
+    <ownedClassifier xsi:type="aadl2:AbstractType" name="Ball">
+      <ownedEventPort name="hit" in="true"/>
+      <ownedEventPort name="bounce" out="true"/>
+    </ownedClassifier>
+    <ownedClassifier xsi:type="aadl2:AbstractImplementation" name="Ball.impl">
+      <ownedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="hybrid" sourceText="{**&#xA;&#x9;&#x9;&#x9;variables&#xA;&#x9;&#x9;&#x9;   x : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;   v : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;   g : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;constants&#xA;&#x9;&#x9;&#x9;&#x9;c= 0.7&#xA;&#x9;&#x9;&#x9;behavior&#xA;&#x9;&#x9;&#x9;&#x9;Ball ::= v:= -c*v &amp; 'DT 1 x= v' &amp; 'DT 1 v=g'   ( x&lt;=0 and v&lt;=0 )  ->  Ball &#xA;&#x9;&#x9;&#x9;&#x9;Start ::= v=:0 &amp; x=:10 &amp; REPEAT(Ball)&#xA;&#x9;&#x9;**}">
+        <parsedAnnexSubclause xsi:type="hybrid:HybridAnnexSubclause" name="hybrid">
+          <var>
+            <behavior_variable type="aadl2:DataType ../../Plugin_Resources/BLESS_Types.aadl#BLESS_Types.Real">
+              <var name="x"/>
+            </behavior_variable>
+            <behavior_variable type="aadl2:DataType ../../Plugin_Resources/BLESS_Types.aadl#BLESS_Types.Real">
+              <var name="v"/>
+            </behavior_variable>
+            <behavior_variable type="aadl2:DataType ../../Plugin_Resources/BLESS_Types.aadl#BLESS_Types.Real">
+              <var name="g"/>
+            </behavior_variable>
+          </var>
+          <con xsi:type="hybrid:BehaviorConstantDeclaration">
+            <const>
+              <constant name="c"/>
+            </const>
+          </con>
+          <beh>
+            <behavior_process name="Ball">
+              <process>
+                <assignment local_variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.1/@var.0">
+                  <expression operator="*">
+                    <term unary_minus="true" variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@con/@const.0/@constant"/>
+                    <term variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.1/@var.0"/>
+                  </expression>
+                </assignment>
+              </process>
+              <process>
+                <continuous_evolution>
+                  <lhs>
+                    <diff>
+                      <time_derivative order="1" x="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.0/@var.0"/>
+                    </diff>
+                  </lhs>
+                  <rhs>
+                    <diff variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.1/@var.0"/>
+                  </rhs>
+                </continuous_evolution>
+              </process>
+              <process>
+                <continuous_evolution>
+                  <lhs>
+                    <diff>
+                      <time_derivative order="1" x="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.1/@var.0"/>
+                    </diff>
+                  </lhs>
+                  <rhs>
+                    <diff variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.2/@var.0"/>
+                  </rhs>
+                </continuous_evolution>
+              </process>
+            </behavior_process>
+          </beh>
+        </parsedAnnexSubclause>
+      </ownedAnnexSubclause>
+      <ownedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="{**&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;variables&#xA;&#x9;&#x9;&#x9;&#x9;static price u_g applied to Ball.g&#xA;&#x9;&#x9;&#x9;distributions&#xA;&#x9;&#x9;&#x9;&#x9;u_g = Normal(-9.8,0.3)&#xA;&#x9;&#x9;**}">
+        <parsedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;variables&#xA;&#x9;&#x9;&#x9;&#x9;static price u_g applied to Ball.g&#xA;&#x9;&#x9;&#x9;distributions&#xA;&#x9;&#x9;&#x9;&#x9;u_g = Normal(-9.8,0.3)&#xA;&#x9;&#x9;"/>
+      </ownedAnnexSubclause>
+      <ownedRealization implemented="#//@ownedPublicSection/@ownedClassifier.2"/>
+    </ownedClassifier>
+  </ownedPublicSection>
+</aadl2:Package>

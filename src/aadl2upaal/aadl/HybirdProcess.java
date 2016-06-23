@@ -6,6 +6,7 @@ public class HybirdProcess {
 	private String name;
 	private Boolean skip=false;
 	private ArrayList<HContinuous> evolutions;
+    public HChoice choice;
 	private HInterrupt interrupt;
 	private ArrayList<Hassignment> asssigments;
     public boolean isRepete=false;

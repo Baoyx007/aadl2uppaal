@@ -17,6 +17,8 @@ public class TypeMapping {
 		map.put("CTCS_Types::Position","clock");
         map.put("CTCS_Types::Acceleration","clock");
         map.put("CTCS_Types::Time","clock");
+
+		map.put("BLESS_Types::Real","clock");
 	}
 
 	public String getMappingType(String str) {

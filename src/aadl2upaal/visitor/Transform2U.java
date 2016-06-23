@@ -195,11 +195,24 @@ public class Transform2U implements NodeVisitor {
                         }
                     }
                     //处理loop
-                    if (process.isRepete) {
+                    if (process.isRepete && t.trans.size()>0) {
+
                         t.trans.get(t.trans.size() - 1).dst = original_loc;
                         t.locs.remove(t.locs.size() - 1);
                     }
+                    //处理 choice
+                    HChoice choice = process.choice;
+                    if(choice!=null){
+                        if(choice.end.getName().equals(process.getName())) {
+                            Location dst =loc;
+                        }else {
 
+                        }
+                        Transition transition = new Transition(loc, loc, 0, "");
+                        transition.setGuard(choice.guard);
+                        transition.setUpdate(process.getAsssigments().get(0).toString());
+                        t.trans.add(transition);
+                    }
                 }
             }
         }
@@ -317,8 +330,9 @@ public class Transform2U implements NodeVisitor {
             } else if (v.getType().equals("static price")) {
                 //在declaration 中初始化
                 String insertDeclared = v.getName() + "=" + v.dist.toString() + ";";
-                int insertPosition = t.declarations.lastIndexOf("initialize(){");
+                int insertPosition = t.declarations.lastIndexOf("initialize(){")+13;
                 t.declarations = t.declarations.substring(0, insertPosition) + insertDeclared + t.declarations.substring(insertPosition, t.declarations.length());
+                //for (t.locs)
             } else if (v.getType().equals("dynamic price")) {
                 //TODO search all occurrence, and replace by distribution
 

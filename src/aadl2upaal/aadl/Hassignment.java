@@ -5,6 +5,7 @@ import aadl2upaal.visitor.TypeMapping;
 public class Hassignment {
 	private AVar var;
 	private int val;
+    public String right="";
 
 	public AVar getVar() {
 		return var;
@@ -26,7 +27,12 @@ public class Hassignment {
 	@Override
 	public String toString() {
 		String ret="";
-		ret+= var.getName()+"="+val;
+        if(right.length()>0){
+           ret+=var.getName()+" = "+ right;
+        }else{
+           ret+= var.getName()+"="+val;
+
+        }
 		return ret;
 	}
 }
