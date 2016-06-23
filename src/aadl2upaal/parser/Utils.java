@@ -240,7 +240,7 @@ public final class Utils {
         r_delay.dist = normal;
         ua.getVars().add(r_delay);
         ua.getDists().add(normal);
-        ua.getQueries().add("Pr[&lt;=300](&lt;&gt; v&lt;=0 &amp;&amp;  s&lt;6000 &amp;&amp; s&gt;0");
+        ua.getQueries().add("Pr[&lt;=300](&lt;&gt; v&lt;=0 &amp;&amp;  s&lt;6000 &amp;&amp; s&gt;0)");
         rbc_impl.getAnnexs().add(ua);
         rbc.setCompoentImpl(rbc_impl);
 
