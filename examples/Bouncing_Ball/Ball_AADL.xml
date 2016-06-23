@@ -6,10 +6,7 @@
       <ownedRealization implemented="#//@ownedPublicSection/@ownedClassifier.0"/>
       <ownedAbstractSubcomponent name="Ball" abstractSubcomponentType="#//@ownedPublicSection/@ownedClassifier.3"/>
     </ownedClassifier>
-    <ownedClassifier xsi:type="aadl2:AbstractType" name="Ball">
-      <ownedEventPort name="hit" in="true"/>
-      <ownedEventPort name="bounce" out="true"/>
-    </ownedClassifier>
+    <ownedClassifier xsi:type="aadl2:AbstractType" name="Ball"/>
     <ownedClassifier xsi:type="aadl2:AbstractImplementation" name="Ball.impl">
       <ownedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="hybrid" sourceText="{**&#xA;&#x9;&#x9;&#x9;variables&#xA;&#x9;&#x9;&#x9;   x : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;   v : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;   g : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;constants&#xA;&#x9;&#x9;&#x9;&#x9;c= 0.7&#xA;&#x9;&#x9;&#x9;behavior&#xA;&#x9;&#x9;&#x9;&#x9;Ball ::= v:= -c*v &amp; 'DT 1 x= v' &amp; 'DT 1 v=g'   ( x&lt;=0 and v&lt;=0 )  ->  Ball &#xA;&#x9;&#x9;&#x9;&#x9;Start ::= v=:0 &amp; x=:10 &amp; REPEAT(Ball)&#xA;&#x9;&#x9;**}">
         <parsedAnnexSubclause xsi:type="hybrid:HybridAnnexSubclause" name="hybrid">
@@ -67,8 +64,8 @@
           </beh>
         </parsedAnnexSubclause>
       </ownedAnnexSubclause>
-      <ownedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="{**&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;variables&#xA;&#x9;&#x9;&#x9;&#x9;static price u_g applied to Ball.g&#xA;&#x9;&#x9;&#x9;distributions&#xA;&#x9;&#x9;&#x9;&#x9;u_g = Normal(-9.8,0.3)&#xA;&#x9;&#x9;**}">
-        <parsedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;variables&#xA;&#x9;&#x9;&#x9;&#x9;static price u_g applied to Ball.g&#xA;&#x9;&#x9;&#x9;distributions&#xA;&#x9;&#x9;&#x9;&#x9;u_g = Normal(-9.8,0.3)&#xA;&#x9;&#x9;"/>
+      <ownedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="{**&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;variables&#xA;&#x9;&#x9;&#x9;&#x9;static price u_g applied to Ball.g&#xA;&#x9;&#x9;&#x9;distributions&#xA;&#x9;&#x9;&#x9;&#x9;u_g = Normal(-9.8,0.3)&#xA;&#x9;&#x9;&#x9;queries&#xA;&#x9;&#x9;&#x9;    p1 = Ball.x&lt;5 &amp;&amp; Ball.v&lt;-1 under 1&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;**}">
+        <parsedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;variables&#xA;&#x9;&#x9;&#x9;&#x9;static price u_g applied to Ball.g&#xA;&#x9;&#x9;&#x9;distributions&#xA;&#x9;&#x9;&#x9;&#x9;u_g = Normal(-9.8,0.3)&#xA;&#x9;&#x9;&#x9;queries&#xA;&#x9;&#x9;&#x9;    p1 = Ball.x&lt;5 &amp;&amp; Ball.v&lt;-1 under 1&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;"/>
       </ownedAnnexSubclause>
       <ownedRealization implemented="#//@ownedPublicSection/@ownedClassifier.2"/>
     </ownedClassifier>

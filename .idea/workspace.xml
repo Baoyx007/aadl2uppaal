@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4a9590df-9f95-46a8-858a-674c97791394" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/aadl2upaal/aadl/HChoice.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/examples/CTCS_12_2_0.2.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/examples/MA.aaxl2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/examples/MA.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/examples/MA_with_U_uppaal.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/examples/MA_with_uncertainty.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/aadl/Hassignment.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/aadl/Hassignment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/aadl/HybirdProcess.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/aadl/HybirdProcess.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/aadl/UVar.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/aadl/UVar.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/parser/AAXLParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/parser/Utils.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/parser/Utils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/Transform2U.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/TypeMapping.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/TypeMapping.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" afterPath="$PROJECT_DIR$/src/aadl2upaal/visitor/UpaalWriter.java" />
-    </list>
+    <list default="true" id="4a9590df-9f95-46a8-858a-674c97791394" name="Default" comment="" />
     <ignored path="aadl2uppaal.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/bin/" />
