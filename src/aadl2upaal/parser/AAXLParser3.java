@@ -56,12 +56,14 @@ public class AAXLParser3 {
                 } else {
 
                 }
+
             } else if (type.getValue().contains("Abstract")) {
                 if (type.getValue().contains("Implementation")) {
                     //把impl 加入到 component 中
-                    ACompoentImpl ab_impl = new ACompoentImpl(comp_name.getValue());
+                    String comp_name_string = comp_name.getValue().substring(0, comp_name.getValue().indexOf("."));
+                    ACompoentImpl ab_impl = new ACompoentImpl(comp_name_string);
                     for (ACompoent comp : amodel.comps) {
-                        if (comp.getName().equals(comp_name.getValue().substring(0, comp_name.getValue().indexOf(".")))) {
+                        if (comp.getName().equals(comp_name_string) ){
                             comp.setCompoentImpl(ab_impl);
                         }
                     }
@@ -92,18 +94,37 @@ public class AAXLParser3 {
             } else if (type.getValue().contains("Thread")) {
 
                 if (type.getValue().contains("Implementation")) {
+                    //把impl 加入到 component 中
+                    String comp_name_string = comp_name.getValue().substring(0, comp_name.getValue().indexOf("."));
+                    ACompoentImpl th_impl = new ACompoentImpl(comp_name_string);
+                    for (ACompoent comp : amodel.comps) {
+                        if (comp.getName().equals(comp_name_string)) {
+                            comp.setCompoentImpl(th_impl);
+                        }
+                    }
 
+                    //遍历所有annex
+                    for (Element annex : ele.getChildren("ownedAnnexSubclause")) {
+                        Element parsedAnnexSubclause = annex.getChild("parsedAnnexSubclause");
+                        String annex_name = parsedAnnexSubclause.getAttributeValue("name");
+                        process_annex(annex_name, parsedAnnexSubclause, th_impl);
+                    }
                 } else {
-
                     ACompoent thread_comp = new ACompoent(comp_name.getValue());
+                    ACompoentDeclare th_declare = new ACompoentDeclare(comp_name.getValue());
+//                    process_ports(ele, de_declare);
+
+                    amodel.comps.add(thread_comp);
+                    thread_comp.setCompoentDeclare(th_declare);
                 }
             } else if (type.getValue().contains("Device")) {
 
                 if (type.getValue().contains("Implementation")) {
                     //把impl 加入到 component 中
-                    ACompoentImpl de_impl = new ACompoentImpl(comp_name.getValue());
+                    String comp_name_string = comp_name.getValue().substring(0, comp_name.getValue().indexOf("."));
+                    ACompoentImpl de_impl = new ACompoentImpl(comp_name_string);
                     for (ACompoent comp : amodel.comps) {
-                        if (comp.getName().equals(comp_name.getValue().substring(0, comp_name.getValue().indexOf(".")))) {
+                        if (comp.getName().equals(comp_name_string)) {
                             comp.setCompoentImpl(de_impl);
                         }
                     }
@@ -290,7 +311,7 @@ public class AAXLParser3 {
             String SEP = "\n \t\t\t";
 
             sourceText = sourceText.replace("\t", "");
-            System.out.println(sourceText);
+            //System.out.println(sourceText);
 
 //            String[] split = sourceText.split(SEP);
 //            for (String s: split){
@@ -363,17 +384,17 @@ public class AAXLParser3 {
                     compile = Pattern.compile("([\\w_]*)?\\s*?=\\s*?(\\w*?)\\(([\\d\\.-]*?),([\\d\\.-]*?)\\)");
                     matcher = compile.matcher(line);
                     if (matcher.find()) {
-                        System.out.println(matcher.group(1) + matcher.group(2) + matcher.group(3) + matcher.group(4));
+                        //System.out.println(matcher.group(1) + matcher.group(2) + matcher.group(3) + matcher.group(4));
                         Distribution dist = new Distribution();
-                        dist.setDistName(matcher.group(2) );
+                        dist.setDistName(matcher.group(2));
 
                         ArrayList<Double> params = new ArrayList<>();
                         params.add(Double.valueOf(matcher.group(3)));
                         params.add(Double.valueOf(matcher.group(4)));
                         dist.setParas(params);
 
-                        for(UVar var : ua.getVars()){
-                            if(var.getName().equals(matcher.group(1))){
+                        for (UVar var : ua.getVars()) {
+                            if (var.getName().equals(matcher.group(1))) {
                                 var.dist = dist;
                             }
                         }
@@ -390,14 +411,14 @@ public class AAXLParser3 {
                 String variables = matcher.group(1);
 
                 String[] split = variables.split("\n");
-                for(String line : split){
-                    if(line.contains("=")){
-                        ua.getQueries().add(line.substring(line.indexOf("=")+1));
+                for (String line : split) {
+                    if (line.contains("=")) {
+                        ua.getQueries().add(line.substring(line.indexOf("=") + 1));
                     }
                 }
             }
 
-                impl.getAnnexs().add(ua);
+            impl.getAnnexs().add(ua);
         } else {
             throw new RuntimeException("not supprot annex");
         }

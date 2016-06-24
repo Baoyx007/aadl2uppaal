@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+<declaration>clock c;urgent chan c_ts;
+urgent chan c_tv;
+urgent chan c_ta;
+urgent chan c_ea;
+urgent chan c_m;
+urgent chan c_r;
+clock v_ts;
+clock v_tv;
+clock v_ta;
+double v_ea;
+double v_m;
+const int PERIOD=2;
+const int MAsize=3;
+const int SR=3;
+const int b=1;
+const int start=0;
+const int SB_Rate=-8;
+const int EB_Rate=-10;
+const double PI = 3.1415926;
+
+//------------Lib for Distributions-------------------------
+
+double normal_random()
+{
+double u = random(1);
+double v = random(1);
+double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);
+if(x&lt;0){return x*-1;}else{ return x;}}
+
+double Normal(double mu, double sigma){
+    double u = random(1);
+    double v = random(1);
+    double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);
+    double ret =  x*sigma + mu;
+    return ret;
+}
+
+double Time_Normal(double mu, double sigma){
+    double u = random(1);
+    double v = random(1);
+    double x = sqrt((-2) * ln(u)) * cos(2 * PI * v);
+    double ret =  x*sigma + mu;
+    if(ret&lt;0)
+        return 0;
+else
+    return ret;
+}
+
+double Uniform(int rangeLow, int rangeHigh) {
+    double myRand = random(32767)/(1.0 + 32767); 
+    int range = rangeHigh - rangeLow + 1;
+    double myRand_scaled = (myRand * range *1.0) + rangeLow;
+    return myRand_scaled;
+}
+
+int Poisson(double expectedValue) {
+  int n = 0; //counter of iteration
+  double limit; 
+  double x;  //pseudo random number
+  limit = exp(-expectedValue);
+  x = random(32767) / 32767; 
+  while (x &gt; limit) {
+    n++;
+    x = x* ( random(32767) / 32767);
+  }
+  return n;
+}
+
+double Expon(double x)
+{
+  double z;                     // Uniform random number (0 &lt; z  &lt; 1 )
+  double exp_value;             // Computed exponential value to be returned
+
+  // Pull a uniform random number (0 &lt;  z &lt; 1 )
+  do
+  {
+    z = random(1);
+  }
+  while ((z == 0) || (z == 1));
+
+  // Compute exponential random variable using inversion method
+  exp_value = -x * log(z);
+
+  return(exp_value);
+}
+
+double a_strategy(){
+    return  1.0;
+}
+typedef struct
+{
+    int ModeTypes;
+    int v1;
+    int v2;
+    int e;
+}Segment;
+int iSeg,nSeg;
+
+typedef struct 
+{
+    Segment seg[MAsize];
+}MovementAuthority;
+
+MovementAuthority iMA;
+</declaration>
+
+<template>
+<name>Train</name>
+<declaration>
+
+void initialize(){v_fr=Normal(-0.5,0.4);
+ }clock ts;
+clock tv;
+clock ta;
+clock t;
+
+double v_delay;
+clock d_t;
+double v_fr;
+clock d_t;
+</declaration>
+<location id="id1">
+<name>Train</name>
+<label kind="invariant">ts'==tv&amp;&amp; tv'==ta&amp;&amp; t'==1 </label>
+<urgent/>
+</location>
+
+<location id="id2">
+<name>int0</name>
+<label kind="invariant">ts'==tv&amp;&amp; tv'==ta&amp;&amp; t'==1 </label>
+<urgent/>
+</location>
+
+<location id="id3">
+<name>int1</name>
+<label kind="invariant">ts'==tv&amp;&amp; tv'==ta&amp;&amp; t'==1 </label>
+</location>
+
+<location id="id4">
+<name>RunningTrain</name>
+<label kind="invariant"> </label>
+<urgent/>
+</location>
+
+<location id="id5">
+<name>temp0</name>
+<label kind="invariant">ts'==tv&amp;&amp; tv'==ta&amp;&amp; t'==1 &amp;&amp; d_t &lt;=v_delay </label>
+</location>
+
+<init ref="id4"/>
+
+<!--  -->
+<transition>
+<source ref="id5"/>
+<target ref="id2"/>
+<label kind="synchronisation">c_ts!</label>
+<label kind="guard" >d_t &gt;=v_delay</label>
+<label kind="assignment">v_ts=ts </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id2"/>
+<target ref="id3"/>
+<label kind="synchronisation">c_tv!</label>
+<label kind="guard" ></label>
+<label kind="assignment">v_tv=tv </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id3"/>
+<target ref="id1"/>
+<label kind="synchronisation">c_ta?</label>
+<label kind="guard" ></label>
+<label kind="assignment">ta= v_ta </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id4"/>
+<target ref="id1"/>
+<label kind="guard" ></label>
+<label kind="assignment">ts=0, tv=0, ta=0,initialize() </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id1"/>
+<target ref="id5"/>
+<label kind="guard" ></label>
+<label kind="assignment">d_t=0,v_delay=Normal(2.2,0.6) </label>
+</transition>
+
+</template>
+
+
+<template>
+<name>Controller</name>
+<declaration>
+
+void initialize(){
+ }</declaration>
+</template>
+
+
+<template>
+<name>RBC</name>
+<declaration>
+
+void initialize(){
+ }
+double r_delay;
+clock d_t;
+</declaration>
+<location id="id1">
+<name>R</name>
+<label kind="invariant"> </label>
+<urgent/>
+</location>
+
+<location id="id2">
+<name>EA</name>
+<label kind="invariant"> </label>
+<urgent/>
+</location>
+
+<location id="id3">
+<name>M</name>
+<label kind="invariant"> </label>
+<urgent/>
+</location>
+
+<location id="id4">
+<name>temp0</name>
+<label kind="invariant"> d_t &lt;=r_delay </label>
+</location>
+
+<init ref="id1"/>
+
+<!--  -->
+<transition>
+<source ref="id4"/>
+<target ref="id2"/>
+<label kind="synchronisation">c_r?</label>
+<label kind="guard" >d_t &gt;=r_delay</label>
+<label kind="assignment">v_r= v_r </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id2"/>
+<target ref="id3"/>
+<label kind="synchronisation">c_ea!</label>
+<label kind="guard" ></label>
+<label kind="assignment">v_ea=v_ea </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id3"/>
+<target ref="id1"/>
+<label kind="synchronisation">c_m!</label>
+<label kind="guard" ></label>
+<label kind="assignment">v_m=v_m </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id1"/>
+<target ref="id4"/>
+<label kind="guard" ></label>
+<label kind="assignment">d_t=0,r_delay=Normal(2.2,0.6) </label>
+</transition>
+
+</template>
+
+<system> system Train,Controller,RBC;</system>
+</nta>
