@@ -155,6 +155,9 @@
           </beh>
         </parsedAnnexSubclause>
       </ownedAnnexSubclause>
+        <ownedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="{**&#xA;&#x9;&#x9;variables &#xA;&#x9;&#x9;&#x9;time dealy_variation applied to ta&#xA; &#x9;&#x9;&#x9;&#x9;-- modeling connection delay&#xA; &#x9;&#x9;&#x9;price acc_variation applied to ta&#xA; &#x9;&#x9;&#x9;&#x9;-- modeling rail friction&#xA; &#x9;&#x9;function&#xA; &#x9;&#x9;&#x9;dealy_variation = Normal(2.2,0.6)&#xA; &#x9;&#x9;&#x9;acc_variation = Normal(0.5,0.4)&#xA; &#x9;&#x9;property&#xA; &#x9;&#x9;&#x9;p1 = Train.tv&lt;=0 &amp;&amp; Train.ts&lt;EOA &amp;&amp; Controller.STOP&#xA; &#x9;&#x9;&#x9;p2 = Train.ts >= 50 under &lt;=100&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;**}">
+            <parsedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="&#xA;&#x9;&#x9;variables &#xA;&#x9;&#x9;&#x9;time v_delay applied to Train.ts&#xA; &#x9;&#x9;&#x9;&#x9;-- modeling connection delay&#xA; &#x9;&#x9;&#x9;static price v_fr applied to Train.ta&#xA; &#x9;&#x9;&#x9;&#x9;-- modeling rail friction&#xA; &#x9;&#x9;distributions&#xA; &#x9;&#x9;&#x9;v_delay = Normal(2.2,0.6)&#xA; &#x9;&#x9;&#x9;v_fr = Normal(-0.5,0.4)&#xA; &#x9;&#x9;queries&#xA; &#x9;&#x9;&#x9;p1 = Train.tv&lt;=0 &amp;&amp; Train.ts&lt;EOA &amp;&amp; Controller.STOP&#xA; &#x9;&#x9;&#x9;p2 = Train.ts >= 50 under &lt;=100&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;"/>
+        </ownedAnnexSubclause>
       <ownedRealization implemented="#//@ownedPublicSection/@ownedClassifier.2"/>
     </ownedClassifier>
     <ownedClassifier xsi:type="aadl2:ProcessType" name="pController">
@@ -4776,7 +4779,7 @@
     </ownedClassifier>
     <ownedClassifier xsi:type="aadl2:DeviceImplementation" name="RBC.impl">
       <ownedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="{**&#xA;&#x9;&#x9;variables &#xA;&#x9;&#x9;&#x9;time dealy_variation applied to ta&#xA; &#x9;&#x9;&#x9;&#x9;-- modeling connection delay&#xA; &#x9;&#x9;&#x9;price acc_variation applied to ta&#xA; &#x9;&#x9;&#x9;&#x9;-- modeling rail friction&#xA; &#x9;&#x9;function&#xA; &#x9;&#x9;&#x9;dealy_variation = Normal(2.2,0.6)&#xA; &#x9;&#x9;&#x9;acc_variation = Normal(0.5,0.4)&#xA; &#x9;&#x9;property&#xA; &#x9;&#x9;&#x9;p1 = Train.tv&lt;=0 &amp;&amp; Train.ts&lt;EOA &amp;&amp; Controller.STOP&#xA; &#x9;&#x9;&#x9;p2 = Train.ts >= 50 under &lt;=100&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;**}">
-        <parsedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="&#xA;&#x9;&#x9;variables &#xA;&#x9;&#x9;&#x9;time dealy_variation applied to ta&#xA; &#x9;&#x9;&#x9;&#x9;-- modeling connection delay&#xA; &#x9;&#x9;&#x9;price acc_variation applied to ta&#xA; &#x9;&#x9;&#x9;&#x9;-- modeling rail friction&#xA; &#x9;&#x9;function&#xA; &#x9;&#x9;&#x9;dealy_variation = Normal(2.2,0.6)&#xA; &#x9;&#x9;&#x9;acc_variation = Normal(0.5,0.4)&#xA; &#x9;&#x9;property&#xA; &#x9;&#x9;&#x9;p1 = Train.tv&lt;=0 &amp;&amp; Train.ts&lt;EOA &amp;&amp; Controller.STOP&#xA; &#x9;&#x9;&#x9;p2 = Train.ts >= 50 under &lt;=100&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;"/>
+        <parsedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="Uncertainty" sourceText="&#xA;&#x9;&#x9;variables &#xA;&#x9;&#x9;&#x9;time r_delay applied to RBC.r&#xA; &#x9;&#x9;&#x9;&#x9;-- modeling connection delay&#xA; &#x9;&#x9;&#x9;distributions&#xA; &#x9;&#x9;&#x9;r_delay = Normal(2.2,0.6)&#xA; &#x9;&#x9;&#x9;queries&#xA; &#x9;&#x9;&#x9;p1 = Pr[&lt;=300](&lt;&gt; v&lt;=0 &amp;&amp;  s&lt;6000 &amp;&amp; s&gt;0)&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;"/>
       </ownedAnnexSubclause>
       <ownedRealization implemented="#//@ownedPublicSection/@ownedClassifier.8"/>
     </ownedClassifier>

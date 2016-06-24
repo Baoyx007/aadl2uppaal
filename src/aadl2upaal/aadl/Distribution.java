@@ -8,7 +8,7 @@ public class Distribution {
     public static int Random = 2;
     public static int Posion = 3;
     public static int exp = 4;
-    public static int TimeNormal=5;
+    public static int TimeNormal = 5;
 
     private UVar varName;
     private int distName;
@@ -20,6 +20,14 @@ public class Distribution {
 
     public void setDistName(int distName) {
         this.distName = distName;
+    }
+
+    public void setDistName(String distName) {
+        switch (distName) {
+            case "Normal":
+                this.distName = Distribution.Normal;
+
+        }
     }
 
     public ArrayList<Double> getParas() {
@@ -36,6 +44,15 @@ public class Distribution {
 
     public void setVarName(UVar varName) {
         this.varName = varName;
+    }
+
+    public int get_dist_by_name(String name) {
+        switch (name) {
+            case "Normal":
+                return Distribution.Normal;
+
+        }
+        return 0;
     }
 
     @Override
@@ -58,7 +75,7 @@ public class Distribution {
                 ret += "Expon(";
                 break;
             case 5:
-                ret +="Time_Normal(";
+                ret += "Time_Normal(";
                 break;
         }
         for (Double v : paras) {

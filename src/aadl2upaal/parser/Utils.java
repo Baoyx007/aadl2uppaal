@@ -11,6 +11,8 @@ import javax.xml.parsers.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Utils {
     final static XPath xp = XPathFactory.newInstance().newXPath();
@@ -96,6 +98,39 @@ public final class Utils {
                     node.getNodeName(), name));
     }
 
+
+    public static String parse_var_type(String type) {
+        return type.substring(type.indexOf("#") + 1).replace(".", "::");
+    }
+
+    //from : #//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.1/@var.0
+    //to : //ownedPublicSection/ownedClassifier[4]/ownedAnnexSubclause[1]/parsedAnnexSubclause/var/behavior_variable[1]/var[1]
+    public static String convert2xpath(String path){
+        path = path.substring(1);
+
+        path = path.replace("@","");
+        Pattern compile = Pattern.compile("\\.(\\d)");
+        Matcher matcher = compile.matcher(path);
+        StringBuffer s = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(s, "[" + String.valueOf(Integer.valueOf(matcher.group(1)) + 1) + "]");
+            //System.out.println(s.toString());
+        }
+        return s.toString();
+    }
+
+    public static APort find_port_by_name(AADLModel amodel,String comp_name, String port_name ){
+        for(ACompoent comp : amodel.comps ){
+            if(comp.getName().equals(comp_name)){
+                for(APort port : comp.getCompoentDeclare().getPorts()){
+                    if(port.getName().equals(port_name)){
+                        return port;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     public static AADLModel getMockModel(String name) {
         AADLModel model = new AADLModel(name);
@@ -435,6 +470,7 @@ public final class Utils {
         controller.setCompoentImpl(controller_impl);
         return model;
     }
+
     public static AADLModel getMockModel2(String name) {
         AADLModel sys = new AADLModel(name);
         ACompoent ball = new ACompoent("Ball");
@@ -481,14 +517,14 @@ public final class Utils {
         hassignment.setVal(0);
         hassignment.setVar(new AVar("v", ""));
         Start.getAsssigments().add(hassignment);
-        hassignment.right="-c*v ";
+        hassignment.right = "-c*v ";
         hassignment.setVar(new AVar("v", ""));
         Ball.getAsssigments().add(hassignment);
         Start.subProcess = Ball;
 
         HChoice hChoice = new HChoice();
-        hChoice.guard=" x&lt;=0 and v&lt;=0 ";
-        hChoice.end=Ball;
+        hChoice.guard = " x&lt;=0 and v&lt;=0 ";
+        hChoice.end = Ball;
         Ball.choice = hChoice;
 
         ACompoentImpl ball_impl = new ACompoentImpl("Ball");
@@ -503,7 +539,7 @@ public final class Utils {
         params_ball.add(-9.8);
         params_ball.add(0.3);
         normal_ball.setParas(params_ball);
-        u_g.applied_var="g";
+        u_g.applied_var = "g";
         u_g.dist = normal_ball;
 
         ua_ball.getVars().add(u_g);
