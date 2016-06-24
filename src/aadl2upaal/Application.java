@@ -4,6 +4,7 @@ import java.io.File;
 
 import aadl2upaal.aadl.AADLModel;
 import aadl2upaal.parser.AAXLParser;
+import aadl2upaal.parser.AAXLParser3;
 import aadl2upaal.upaal.UModel;
 import aadl2upaal.visitor.Transform2U;
 import aadl2upaal.visitor.UpaalGenerator;
@@ -17,7 +18,7 @@ public class Application {
 			System.exit(1);
 		}
 		// aadl xml
-		AAXLParser par = new AAXLParser(new File(args[0]));
+		AAXLParser3 par = new AAXLParser3(new File(args[0]));
 		System.out.println("Generating AADL model from " + args[0]);
 		AADLModel aadlModel = par.createAADLModel();
 		System.out.println("AADL model created successfully");
