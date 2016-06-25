@@ -1,6 +1,7 @@
 package aadl2upaal.parser;
 
 import aadl2upaal.aadl.*;
+import aadl2upaal.upaal.Location;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -63,7 +64,7 @@ public class AAXLParser3 {
                     String comp_name_string = comp_name.getValue().substring(0, comp_name.getValue().indexOf("."));
                     ACompoentImpl ab_impl = new ACompoentImpl(comp_name_string);
                     for (ACompoent comp : amodel.comps) {
-                        if (comp.getName().equals(comp_name_string) ){
+                        if (comp.getName().equals(comp_name_string)) {
                             comp.setCompoentImpl(ab_impl);
                         }
                     }
@@ -302,6 +303,161 @@ public class AAXLParser3 {
 
             impl.getAnnexs().add(hybirdAnnex);
         } else if (annex_name.equals("BLESS")) {
+            BLESSAnnex ba = new BLESSAnnex("");
+
+            // invariant
+            Element invariant = parsedAnnexSubclause.getChild("invariant");
+            if (invariant != null) {
+                ;
+            }
+
+            //var
+            Element var = parsedAnnexSubclause.getChild("var");
+            if (var != null) {
+                for (Element bv : var.getChildren("bv")) {
+                    String v_name = bv.getChild("variable_names").getChild("behavior_variable").getAttributeValue("var");
+                    String v_type = bv.getChild("type").getAttributeValue("data_component_reference");
+                    v_type = v_type.substring(v_type.indexOf("#") + 1).replace(".", "::");
+
+                    BVar v = new BVar(v_name, v_type);
+
+                    Element expression = bv.getChild("expression");
+                    if (expression != null) {
+                        Element init_val = expression.getChild("se").getChild("v").getChild("const ");
+                        if (init_val != null) {
+                            int val = Integer.valueOf(init_val.getAttributeValue("integer_literal", "0"));
+                            v.setInitVal(val);
+                        }
+                    }
+
+                    ba.getVariables().add(v);
+                }
+            }
+
+            //states
+            List<Element> states = parsedAnnexSubclause.getChildren("states");
+            for (Element state : states) {
+
+                Location loc = new Location(state.getAttributeValue("name"), null);
+                String tag = state.getAttributeValue("tag", "null");
+                if (tag.equals("initial")) {
+                    loc.isInitial = true;
+                } else if (tag.equals("complete")) {
+                    loc.isCommitted = true;
+                }
+                ba.getLocs().add(loc);
+            }
+            //transitions
+            Element transitions = parsedAnnexSubclause.getChild("transitions");
+            if (transitions != null) {
+                for (Element bt : transitions.getChildren("bt")) {
+                    String sources = bt.getAttributeValue("sources");
+                    Element source_ele = (Element) xpfac.compile(Utils.convert2xpath(sources), Filters.element()).evaluateFirst(doc.getRootElement());
+                    Location src_loc = Utils.find_state_by_name(source_ele.getAttributeValue("name", ""), ba.getLocs());
+
+                    String destination = bt.getAttributeValue("destination");
+                    Element dst_ele = (Element) xpfac.compile(Utils.convert2xpath(destination), Filters.element()).evaluateFirst(doc.getRootElement());
+                    Location dst_loc = Utils.find_state_by_name(dst_ele.getAttributeValue("name", ""), ba.getLocs());
+
+                    String bt_name = bt.getChild("transition_label").getAttributeValue("name");
+                    BTransition bt_aadl = new BTransition();
+                    bt_aadl.setSrc(src_loc);
+                    bt_aadl.setDst(dst_loc);
+                    bt_aadl.setName(bt_name);
+
+                    //guard
+                    Element execute = bt.getChild("execute");
+                    if (execute != null) {
+                        String source_annex = parsedAnnexSubclause.getParentElement().getAttributeValue("sourceText");
+                        Pattern compile = Pattern.compile(bt_name + ".*?-\\[([\\s\\S]*?)\\]-");
+                        Matcher matcher = compile.matcher(source_annex);
+                        String guard = "";
+                        if (matcher.find()) {
+                            guard = matcher.group(1);
+                            guard = guard.replaceAll("&#x9;", "");
+                            guard = guard.replaceAll("&#xA;", "");
+                            guard = guard.replaceAll("\n", " ");
+                            guard = guard.replaceAll("\t", "");
+//                            System.out.println(guard);
+                            bt_aadl.setGuard(guard);
+                        }
+
+                    }
+
+                    //dispatch
+                    Element dispatch = bt.getChild("dispatch");
+                    if (dispatch != null) {
+                        ;
+                    }
+
+                    //action
+                    ArrayList<BUpdate> bu = new ArrayList<>();
+
+
+                    Element behavior = bt.getChild("behavior");
+                    List<Element> action = null;
+                    if (behavior != null) {
+                        action = behavior.getChildren("action");
+                    }
+                    if (action != null) {
+                        for (Element act : action) {
+                            //precondition
+                            //act
+                            Element each_act = act.getChild("action");
+
+                            Element basic = each_act.getChild("basic");
+                            if (basic != null) {
+                                //communication
+                                Element communication = basic.getChild("communication");
+                                if (communication != null) {
+                                    //inport
+                                    if (communication.getChild("pi") != null) {
+                                        String port_name = communication.getChild("pi").getAttributeValue("port");
+                                        String val = communication.getChild("pi").getChild("var").getChild("pn").getAttributeValue("identifier");
+                                        BVar varByName = Utils.getVarByName(val, ba.getVariables());
+                                        //TODO 应该用connection来查找
+                                        APort port_by_name = Utils.find_port_by_name(amodel, port_name);
+                                        if (port_by_name == null) {
+                                            //还没初始化出来
+                                            port_by_name = new APort(port_name, APort.out);
+                                        }
+                                        APort same_oppo_port = port_by_name.get_same_oppo_port();
+                                        bu.add(new BUpdate(null, same_oppo_port, varByName));
+                                    } else if (communication.getChild("po") != null) {
+                                        //outport
+                                        //event
+                                        String port_name = communication.getChild("po").getAttributeValue("port");
+                                        APort port_by_name = Utils.find_port_by_name(amodel, port_name);
+                                        if (port_by_name == null) {
+                                            //还没初始化出来
+                                            port_by_name = new APort(port_name, APort.in);
+                                        }
+                                        APort same_oppo_port = port_by_name.get_same_oppo_port();
+
+                                        //data
+                                        Attribute val = (Attribute) xpfac.compile("/pn/@identifier", Filters.attribute()).evaluateFirst(communication);
+                                        if (val != null) {
+                                            String val_name = val.getValue();
+                                            BVar varByName = Utils.getVarByName(val_name, ba.getVariables());
+                                            bu.add(new BUpdate(null, same_oppo_port, varByName));
+                                        } else {
+                                            bu.add(new BUpdate(null, same_oppo_port, null));
+                                        }
+                                    }
+
+                                }
+                                //mutil_assgin
+
+                            }
+                            //postcondition
+                        }
+                    }
+                    bt_aadl.setUpdate(bu);
+                    ba.getTrans().add(bt_aadl);
+                }
+            }
+
+            impl.getAnnexs().add(ba);
 
         } else if (annex_name.equals("Uncertainty")) {
             UncertaintyAnnex ua = new UncertaintyAnnex("");

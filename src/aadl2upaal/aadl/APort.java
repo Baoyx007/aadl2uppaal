@@ -48,4 +48,9 @@ public class APort extends ANode {
 	// return null;
 	// }
 
+    public APort get_same_oppo_port(){
+        APort port = new APort(this.getName(), this.direction * -1);
+        return port;
+    }
+
 }

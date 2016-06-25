@@ -5,7 +5,9 @@ import javax.xml.xpath.*;
 
 import aadl2upaal.aadl.*;
 import aadl2upaal.upaal.Location;
+import org.jdom2.*;
 import org.w3c.dom.*;
+import org.w3c.dom.Document;
 
 import javax.xml.parsers.*;
 
@@ -105,10 +107,10 @@ public final class Utils {
 
     //from : #//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.1/@var.0
     //to : //ownedPublicSection/ownedClassifier[4]/ownedAnnexSubclause[1]/parsedAnnexSubclause/var/behavior_variable[1]/var[1]
-    public static String convert2xpath(String path){
+    public static String convert2xpath(String path) {
         path = path.substring(1);
 
-        path = path.replace("@","");
+        path = path.replace("@", "");
         Pattern compile = Pattern.compile("\\.(\\d)");
         Matcher matcher = compile.matcher(path);
         StringBuffer s = new StringBuffer();
@@ -119,14 +121,47 @@ public final class Utils {
         return s.toString();
     }
 
-    public static APort find_port_by_name(AADLModel amodel,String comp_name, String port_name ){
-        for(ACompoent comp : amodel.comps ){
-            if(comp.getName().equals(comp_name)){
-                for(APort port : comp.getCompoentDeclare().getPorts()){
-                    if(port.getName().equals(port_name)){
+    public static APort find_port_by_name(AADLModel amodel, String comp_name, String port_name) {
+        for (ACompoent comp : amodel.comps) {
+            if (comp.getName().equals(comp_name)) {
+                for (APort port : comp.getCompoentDeclare().getPorts()) {
+                    if (port.getName().equals(port_name)) {
                         return port;
                     }
                 }
+            }
+        }
+        return null;
+    }
+
+    public static APort find_port_by_name(AADLModel amodel, String port_name) {
+        for (ACompoent comp : amodel.comps) {
+            for (APort port : comp.getCompoentDeclare().getPorts()) {
+                if (port.getName().contains(String.valueOf(port_name.charAt(port_name.length() - 1)))) {
+                    if (port_name.equals("ea")) {
+                        return null;
+                    } else {
+                        return port;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Location find_state_by_name(String name, ArrayList<Location> locs) {
+        for (Location loc : locs) {
+            if (loc.name.equals(name)) {
+                return loc;
+            }
+        }
+        return null;
+    }
+
+    public static BVar getVarByName(String var, ArrayList<BVar> variables) {
+        for (BVar bv : variables) {
+            if (bv.getName().equals(var)) {
+                return bv;
             }
         }
         return null;
@@ -549,5 +584,6 @@ public final class Utils {
         ball.setCompoentImpl(ball_impl);
         return sys;
     }
+
 
 }
