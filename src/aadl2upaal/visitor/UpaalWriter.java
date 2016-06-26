@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import aadl2upaal.aadl.APort;
 import aadl2upaal.aadl.AVar;
@@ -176,7 +178,17 @@ public class UpaalWriter {
         out.println("<queries>");
         for (String query : model.queries) {
             out.println("<query>");
-            out.println("<formula>" + query + "</formula>");
+
+            String right_query="";
+            String[] unders = query.split("under");
+            if(unders.length<2){
+                right_query="Pr[<=1000](<>"+unders[0]+")";
+            }else {
+                right_query="Pr["+unders[1]+"](<>"+unders[0]+")";
+            }
+
+
+            out.println("<formula>" + right_query.replace("&","&amp;").replace(">","&gt;").replace("<","&lt;") + "</formula>");
             out.println("</query>");
         }
         out.println("</queries>");
@@ -199,7 +211,15 @@ public class UpaalWriter {
         //if (t != model.getTopTemplate())
         //	out.printf("clock %s;%n", clock);
         out.println();
-
+        //place initialize on the last
+        Pattern compile = Pattern.compile("void initialize\\(\\)\\{[\\s\\S]*?\\}");
+        Matcher matcher = compile.matcher(t.declarations);
+        String init  = "";
+        if (matcher.find()) {
+            init = matcher.group();
+            t.declarations = matcher.replaceFirst("");
+        }
+        t.declarations= t.declarations+init;
         out.print(t.declarations);
         out.println("</declaration>");
 

@@ -1,6 +1,5 @@
 package aadl2upaal.aadl;
 
-import aadl2upaal.visitor.TypeMapping;
 
 public class Hassignment {
 	private AVar var;

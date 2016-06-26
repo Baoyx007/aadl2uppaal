@@ -111,17 +111,17 @@ MovementAuthority iMA;
 <name>Train</name>
 <declaration>
 
-void initialize(){v_fr=Normal(-0.5,0.4);
- }clock ts;
+clock ts;
 clock tv;
 clock ta;
 clock t;
 
+ 
 double v_delay;
 clock d_t;
 double v_fr;
-clock d_t;
-</declaration>
+void initialize(){v_fr=Normal(-0.5,0.4);
+ }</declaration>
 <location id="id1">
 <name>Train</name>
 <label kind="invariant">ts'==tv&amp;&amp; tv'==ta&amp;&amp; t'==1 </label>
@@ -202,8 +202,256 @@ clock d_t;
 <name>Controller</name>
 <declaration>
 
-void initialize(){
- }</declaration>
+void update(){return;}double i;
+double b;
+double v;
+double s;
+double e;
+double xl;
+
+
+bool guard_0(){ return not ((s==0) or ((v &lt; iMA.seg[iSeg].v2))) or not ((s==0) or  ((((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v2 + (2*b*iMA.seg[iSeg].e)))));}
+
+
+
+bool guard_1(){ return ( (s==0) or ((v &lt; iMA.seg[iSeg].v2))) or  (((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v2 + (2*b*iMA.seg[iSeg].e)));}
+
+
+
+bool guard_2(){ return  ((s==0) or ((v &lt; iMA.seg[iSeg].v2))) and ((s==0) or  ((((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v2 + (2*b*iMA.seg[iSeg].e))))) ;}
+
+
+
+bool guard_3(){ return not (((s==0) or ((v &lt; iMA.seg[iSeg].v2))) and ((s==0) or  ((((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v2 + (2*b*iMA.seg[iSeg].e)))))) ;}
+
+
+
+bool guard_4(){ return not (v &lt; iMA.seg[iSeg].v1) or not ((((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v1 + (2*b*iMA.seg[iSeg].e)))) ;}
+
+
+
+bool guard_5(){ return not (v &lt; iMA.seg[iSeg].v1) or not ((((v*v) + (2*b*s)) &lt; (iMA.seg[nSeg].v1 + (2*b*iMA.seg[iSeg].e))));}
+
+</declaration>
+<location id="id1">
+<name>READY</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id2">
+<name>GMA</name>
+<label kind="invariant"> </label>
+<committed/>
+</location>
+
+<location id="id3">
+<name>CMA</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id4">
+<name>RETRY</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id5">
+<name>MFR</name>
+<label kind="invariant"> </label>
+<committed/>
+</location>
+
+<location id="id6">
+<name>CMF</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id7">
+<name>SBI</name>
+<label kind="invariant"> </label>
+<committed/>
+</location>
+
+<location id="id8">
+<name>CSB</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id9">
+<name>EBI</name>
+<label kind="invariant"> </label>
+<committed/>
+</location>
+
+<location id="id10">
+<name>STOP</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id11">
+<name>extra_loc_0</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id12">
+<name>extra_loc_1</name>
+<label kind="invariant"> </label>
+</location>
+
+<location id="id13">
+<name>extra_loc_2</name>
+<label kind="invariant"> </label>
+</location>
+
+<init ref="id1"/>
+
+<!-- T0_go -->
+<transition>
+<source ref="id1"/>
+<target ref="id2"/>
+<label kind="synchronisation">c_r!</label>
+<label kind="guard" ></label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- T1_MA_Check -->
+<transition>
+<source ref="id2"/>
+<target ref="id11"/>
+<label kind="synchronisation">c_m?</label>
+<label kind="guard" ></label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- tmp_tans_0 -->
+<transition>
+<source ref="id11"/>
+<target ref="id3"/>
+<label kind="synchronisation">c_ea?</label>
+<label kind="guard" ></label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- T2_MA_Ok -->
+<transition>
+<source ref="id3"/>
+<target ref="id5"/>
+<label kind="guard" >not (iMA.seg[0].v1==0)</label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- T3_Move_Check -->
+<transition>
+<source ref="id5"/>
+<target ref="id12"/>
+<label kind="synchronisation">c_ts?</label>
+<label kind="guard" ></label>
+<label kind="assignment">s= v_ts </label>
+</transition>
+
+<!-- tmp_tans_1 -->
+<transition>
+<source ref="id12"/>
+<target ref="id6"/>
+<label kind="synchronisation">c_tv?</label>
+<label kind="guard" ></label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- T4_SBI_Point -->
+<transition>
+<source ref="id6"/>
+<target ref="id7"/>
+<label kind="synchronisation">c_ta!</label>
+<label kind="guard" >guard_0()</label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- T5_Move_Ok -->
+<transition>
+<source ref="id6"/>
+<target ref="id5"/>
+<label kind="synchronisation">c_ta!</label>
+<label kind="guard" >guard_1()</label>
+<label kind="assignment">v_ta=xl </label>
+</transition>
+
+<!-- T6_SBI_Check -->
+<transition>
+<source ref="id7"/>
+<target ref="id13"/>
+<label kind="synchronisation">c_ts?</label>
+<label kind="guard" ></label>
+<label kind="assignment">s= v_ts </label>
+</transition>
+
+<!-- tmp_tans_2 -->
+<transition>
+<source ref="id13"/>
+<target ref="id8"/>
+<label kind="synchronisation">c_tv?</label>
+<label kind="guard" ></label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- T7_SBI_Out -->
+<transition>
+<source ref="id8"/>
+<target ref="id5"/>
+<label kind="synchronisation">c_ta!</label>
+<label kind="guard" >guard_2()</label>
+<label kind="assignment">v_ta=xl </label>
+</transition>
+
+<!-- T8_SBI_Ok -->
+<transition>
+<source ref="id8"/>
+<target ref="id7"/>
+<label kind="guard" >guard_3()</label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- T9_MA_NotOk -->
+<transition>
+<source ref="id3"/>
+<target ref="id4"/>
+<label kind="guard" >iMA.seg[0].v1==0</label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- T10_MA_Retry -->
+<transition>
+<source ref="id4"/>
+<target ref="id2"/>
+<label kind="guard" ></label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- T11_EBI_Point -->
+<transition>
+<source ref="id6"/>
+<target ref="id9"/>
+<label kind="synchronisation">c_ta!</label>
+<label kind="guard" >guard_4()</label>
+<label kind="assignment">v_ta=b </label>
+</transition>
+
+<!-- T12_Stop -->
+<transition>
+<source ref="id9"/>
+<target ref="id10"/>
+<label kind="guard" >v==0</label>
+<label kind="assignment"> </label>
+</transition>
+
+<!-- T13_EBI_Point -->
+<transition>
+<source ref="id7"/>
+<target ref="id9"/>
+<label kind="synchronisation">c_ta!</label>
+<label kind="guard" >guard_5()</label>
+<label kind="assignment">v_ta=b </label>
+</transition>
+
 </template>
 
 
@@ -211,11 +459,12 @@ void initialize(){
 <name>RBC</name>
 <declaration>
 
-void initialize(){
- }
+
+ 
 double r_delay;
 clock d_t;
-</declaration>
+void initialize(){
+ }</declaration>
 <location id="id1">
 <name>R</name>
 <label kind="invariant"> </label>
@@ -247,7 +496,7 @@ clock d_t;
 <target ref="id2"/>
 <label kind="synchronisation">c_r?</label>
 <label kind="guard" >d_t &gt;=r_delay</label>
-<label kind="assignment">v_r= v_r </label>
+<label kind="assignment"> </label>
 </transition>
 
 <!--  -->
@@ -279,4 +528,15 @@ clock d_t;
 </template>
 
 <system> system Train,Controller,RBC;</system>
+<queries>
+<query>
+<formula>Pr[&lt;=1000](&lt;&gt; Train.tv&lt;=0 &amp;&amp; Train.ts&lt;EOA &amp;&amp; Controller.STOP)</formula>
+</query>
+<query>
+<formula>Pr[ &lt;=100](&lt;&gt; Train.ts &gt;= 50 )</formula>
+</query>
+<query>
+<formula>Pr[&lt;=1000](&lt;&gt; Pr[&lt;=300](&lt;&gt; v&lt;=0 &amp;&amp;  s&lt;6000 &amp;&amp; s&gt;0))</formula>
+</query>
+</queries>
 </nta>

@@ -195,17 +195,17 @@ public class Transform2U implements NodeVisitor {
                         }
                     }
                     //处理loop
-                    if (process.isRepete && t.trans.size()>0) {
+                    if (process.isRepete && t.trans.size() > 0) {
 
                         t.trans.get(t.trans.size() - 1).dst = original_loc;
                         t.locs.remove(t.locs.size() - 1);
                     }
                     //处理 choice
                     HChoice choice = process.choice;
-                    if(choice!=null){
-                        if(choice.end.getName().equals(process.getName())) {
-                            Location dst =loc;
-                        }else {
+                    if (choice != null) {
+                        if (choice.end.getName().equals(process.getName())) {
+                            Location dst = loc;
+                        } else {
 
                         }
                         Transition transition = new Transition(loc, loc, 0, "");
@@ -245,6 +245,12 @@ public class Transform2U implements NodeVisitor {
                 transition.guard = "guard_" + String.valueOf(j) + "()";
                 j++;
             } else {
+                if (tmp_guard.contains("=null")) {
+                    tmp_guard=tmp_guard.replace("=null", ".seg[0].v1=0");
+                }
+                if(tmp_guard.contains("=")){
+                    tmp_guard=tmp_guard.replace("=","==");
+                }
                 transition.guard = tmp_guard;
             }
 
@@ -301,8 +307,9 @@ public class Transform2U implements NodeVisitor {
         int[] i = {0};
         for (UVar v : ua.getVars()) {
             t.declarations += "double " + v.getName() + ";\n";
-            t.declarations += "clock d_t;\n";// for delay location
+
             if (v.getType().equals("time")) {
+                t.declarations += "clock d_t;\n";// for delay location
                 //在前端插入一条边和一个location
                 Location delay_location = null;
                 Transition delay_trans = null;
@@ -330,7 +337,7 @@ public class Transform2U implements NodeVisitor {
             } else if (v.getType().equals("static price")) {
                 //在declaration 中初始化
                 String insertDeclared = v.getName() + "=" + v.dist.toString() + ";";
-                int insertPosition = t.declarations.lastIndexOf("initialize(){")+13;
+                int insertPosition = t.declarations.lastIndexOf("initialize(){") + 13;
                 t.declarations = t.declarations.substring(0, insertPosition) + insertDeclared + t.declarations.substring(insertPosition, t.declarations.length());
                 //for (t.locs)
             } else if (v.getType().equals("dynamic price")) {
@@ -354,8 +361,7 @@ public class Transform2U implements NodeVisitor {
     @Override
     public void visit(ACompoentImpl impl) {
         Template template = new Template(impl.getName());
-        template.declarations += "void initialize(){\n" +
-                " }";
+
         // for connection
 
         //for annex
@@ -370,6 +376,8 @@ public class Transform2U implements NodeVisitor {
                 visit((BLESSAnnex) annex, template);
             }
         }
+
+
         if (ua != null) {
             if (annexs.size() == 1) {
                 //仅仅包含UA
@@ -402,7 +410,9 @@ public class Transform2U implements NodeVisitor {
                         start.setInitial(true);
                         lastTranstion = new Transition(start, null, 0, "");
                         lastTranstion.chann = new Channel("c_" + p.getName(), p.getDirection(), "");
-                        lastTranstion.chann.value = "v_" + p.getName();
+                        if(p.getClass()!=AEventPort.class) {
+                            lastTranstion.chann.value = "v_" + p.getName();
+                        }
                         isStart = false;
                         template.locs.add(start);
                         template.trans.add(lastTranstion);
@@ -433,7 +443,10 @@ public class Transform2U implements NodeVisitor {
                 }
                 lastTranstion.dst = start;
             }
+            template.declarations += "\n void initialize(){\n" +
+                    " }";
             visit(ua, template);
+
         }
         umodel.addTemplate(template);
     }
