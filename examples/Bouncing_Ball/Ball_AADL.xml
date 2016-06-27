@@ -8,30 +8,28 @@
     </ownedClassifier>
     <ownedClassifier xsi:type="aadl2:AbstractType" name="Ball"/>
     <ownedClassifier xsi:type="aadl2:AbstractImplementation" name="Ball.impl">
-      <ownedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="hybrid" sourceText="{**&#xA;&#x9;&#x9;&#x9;variables&#xA;&#x9;&#x9;&#x9;   x : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;   v : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;   g : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;constants&#xA;&#x9;&#x9;&#x9;&#x9;c= 0.7&#xA;&#x9;&#x9;&#x9;behavior&#xA;&#x9;&#x9;&#x9;&#x9;Ball ::= v:= -c*v &amp; 'DT 1 x= v' &amp; 'DT 1 v=g'   ( x&lt;=0 and v&lt;=0 )  ->  Ball &#xA;&#x9;&#x9;&#x9;&#x9;Start ::= v=:0 &amp; x=:10 &amp; REPEAT(Ball)&#xA;&#x9;&#x9;**}">
+      <ownedAnnexSubclause xsi:type="aadl2:DefaultAnnexSubclause" name="hybrid" sourceText="{**&#xA;&#x9;&#x9;&#x9;variables&#xA;&#x9;&#x9;&#x9;   x : BLESS_Types::Time&#xA;&#x9;&#x9;&#x9;   v : BLESS_Types::Time&#xA;&#x9;&#x9;&#x9;   g : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;   c : BLESS_Types::Real&#xA;&#x9;&#x9;&#x9;behavior&#xA;&#x9;&#x9;&#x9;&#x9;Ball ::= v:= c*v &amp; 'DT 1 x= v' &amp; 'DT 1 v=g' &amp; ( [x&lt;=10]) -> Ball [] ([x>=10])-> Continue&#xA;&#x9;&#x9;&#x9;&#x9;Continue ::= skip&#xA;&#x9;&#x9;&#x9;&#x9;Start  ::=  v:=0 &amp; x:=10  &amp; c:=-0.7  &amp; REPEAT(Ball)&#xA;&#x9;&#x9;**}">
         <parsedAnnexSubclause xsi:type="hybrid:HybridAnnexSubclause" name="hybrid">
           <var>
-            <behavior_variable type="aadl2:DataType ../../Plugin_Resources/BLESS_Types.aadl#BLESS_Types.Real">
+            <behavior_variable type="aadl2:DataType ../../Plugin_Resources/BLESS_Types.aadl#BLESS_Types.Time">
               <var name="x"/>
             </behavior_variable>
-            <behavior_variable type="aadl2:DataType ../../Plugin_Resources/BLESS_Types.aadl#BLESS_Types.Real">
+            <behavior_variable type="aadl2:DataType ../../Plugin_Resources/BLESS_Types.aadl#BLESS_Types.Time">
               <var name="v"/>
             </behavior_variable>
             <behavior_variable type="aadl2:DataType ../../Plugin_Resources/BLESS_Types.aadl#BLESS_Types.Real">
               <var name="g"/>
             </behavior_variable>
+            <behavior_variable type="aadl2:DataType ../../Plugin_Resources/BLESS_Types.aadl#BLESS_Types.Real">
+              <var name="c"/>
+            </behavior_variable>
           </var>
-          <con xsi:type="hybrid:BehaviorConstantDeclaration">
-            <const>
-              <constant name="c"/>
-            </const>
-          </con>
           <beh>
             <behavior_process name="Ball">
               <process>
                 <assignment local_variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.1/@var.0">
                   <expression operator="*">
-                    <term unary_minus="true" variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@con/@const.0/@constant"/>
+                    <term variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.3/@var.0"/>
                     <term variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.1/@var.0"/>
                   </expression>
                 </assignment>
@@ -59,6 +57,67 @@
                     <diff variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.2/@var.0"/>
                   </rhs>
                 </continuous_evolution>
+              </process>
+              <process>
+                <choice>
+                  <alt behavior_process="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@beh/@behavior_process.0">
+                    <boolean_expression>
+                      <bool>
+                        <relation relation_symbol="&lt;=">
+                          <lhs>
+                            <term variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.0/@var.0"/>
+                          </lhs>
+                          <rhs>
+                            <term integer_literal="0"/>
+                          </rhs>
+                        </relation>
+                      </bool>
+                    </boolean_expression>
+                  </alt>
+                  <alt behavior_process="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@beh/@behavior_process.1">
+                    <boolean_expression>
+                      <bool>
+                        <relation relation_symbol="&gt;=">
+                          <lhs>
+                            <term variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.0/@var.0"/>
+                          </lhs>
+                          <rhs>
+                            <term integer_literal="0"/>
+                          </rhs>
+                        </relation>
+                      </bool>
+                    </boolean_expression>
+                  </alt>
+                </choice>
+              </process>
+            </behavior_process>
+            <behavior_process name="Continue">
+              <process skip="skip"/>
+            </behavior_process>
+            <behavior_process name="Start">
+              <process>
+                <assignment local_variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.1/@var.0">
+                  <expression>
+                    <term integer_literal="0"/>
+                  </expression>
+                </assignment>
+              </process>
+              <process>
+                <assignment local_variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.0/@var.0">
+                  <expression>
+                    <term integer_literal="10"/>
+                  </expression>
+                </assignment>
+              </process>
+              <process>
+                <assignment local_variable="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@var/@behavior_variable.3/@var.0">
+                  <expression>
+                    <term unary_minus="true" real_literal="0.7"/>
+                  </expression>
+                </assignment>
+              </process>
+              <process>
+                <repetition behavior_process="#//@ownedPublicSection/@ownedClassifier.3/@ownedAnnexSubclause.0/@parsedAnnexSubclause/@beh/@behavior_process.0"/>
               </process>
             </behavior_process>
           </beh>

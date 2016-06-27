@@ -184,7 +184,7 @@ public class UpaalWriter {
             if(unders.length<2){
                 right_query="Pr[<=1000](<>"+unders[0]+")";
             }else {
-                right_query="Pr["+unders[1]+"](<>"+unders[0]+")";
+                right_query="Pr[<="+unders[1]+"](<>"+unders[0]+")";
             }
 
 

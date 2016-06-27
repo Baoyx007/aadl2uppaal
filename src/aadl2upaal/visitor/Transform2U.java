@@ -114,7 +114,7 @@ public class Transform2U implements NodeVisitor {
         }
 
         // implement
-        // conns Ö»ÊÇËµÃ÷¶Ë¿ÚÖ®¼äµÄÁ¬½ÓµÄ ,ÊÇÕâ¸öÊµÏÖÓÃµ½µÄ
+        // conns Ö»ï¿½ï¿½Ëµï¿½ï¿½ï¿½Ë¿ï¿½Ö®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ ,ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½
         ACompoentImpl compoentImpl = acomp.getCompoentImpl();
         for (Connection c : compoentImpl.getConns()) {
             // template.addChannels(new Channel(c.getName(), direction));
@@ -135,11 +135,11 @@ public class Transform2U implements NodeVisitor {
 
         //behavior
         for (HybirdProcess process : ha.getBehavior()) {
-            //Ã¿¸öprocess ¶¼ÊÇÒ»¸ölocation
+            //Ã¿ï¿½ï¿½process ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½location
             if (process.getSkip()) {
                 continue;
             } else {
-                //²»ÖØ¸´Ìí¼Ólocation
+                //ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½location
                 Location loc = null;
                 for (Location l : t.locs) {
                     if (l.name.equals(process.getName())) {
@@ -174,12 +174,12 @@ public class Transform2U implements NodeVisitor {
                 } else {
                     loc.invariant += process.getStringContinuous().toString();
                     Location original_loc = loc;
-                    //´¦ÀíÖÐ¶Ï
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
                     HInterrupt interrupt = process.getInterrupt();
                     if (interrupt != null) {
                         int i = 0;
                         for (HCommunication comm : interrupt.getComm()) {
-                            //Ã¿¸öÖÐ¶Ï¶¼»áÉú³ÉÒ»Ìõ±ßºÍlocation
+                            //Ã¿ï¿½ï¿½ï¿½Ð¶Ï¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ßºï¿½location
                             Location int_loc = new Location("int" + String.valueOf(i), null);
                             int_loc.setInvariant(process.getStringContinuous().toString());
                             Transition add_trans = new Transition(loc, int_loc, 0, "");
@@ -194,13 +194,17 @@ public class Transform2U implements NodeVisitor {
                             i++;
                         }
                     }
-                    //´¦Àíloop
+                    //ï¿½ï¿½ï¿½ï¿½loop
                     if (process.isRepete && t.trans.size() > 0) {
 
                         t.trans.get(t.trans.size() - 1).dst = original_loc;
                         t.locs.remove(t.locs.size() - 1);
+                    }else if(process.isRepete && t.trans.size()<=0){
+                        Transition transition = new Transition(original_loc, original_loc, 0, "");
+                        transition.setUpdate(process.getStringAssignment());
+                        t.trans.add(transition);
                     }
-                    //´¦Àí choice
+                    //ï¿½ï¿½ï¿½ï¿½ choice
                     HChoice choice = process.choice;
                     if (choice != null) {
                         if (choice.end.getName().equals(process.getName())) {
@@ -246,10 +250,10 @@ public class Transform2U implements NodeVisitor {
                 j++;
             } else {
                 if (tmp_guard.contains("=null")) {
-                    tmp_guard=tmp_guard.replace("=null", ".seg[0].v1=0");
+                    tmp_guard = tmp_guard.replace("=null", ".seg[0].v1=0");
                 }
-                if(tmp_guard.contains("=")){
-                    tmp_guard=tmp_guard.replace("=","==");
+                if (tmp_guard.contains("=")) {
+                    tmp_guard = tmp_guard.replace("=", "==");
                 }
                 transition.guard = tmp_guard;
             }
@@ -257,7 +261,7 @@ public class Transform2U implements NodeVisitor {
 
             ArrayList<BUpdate> listOfUpdate = transition.getUpdate();
 
-            //½«Ã¿¸ötransition ÖÐ°üº¬ÐÅµÀµÄaction À©Õ¹³É¶à¸ötransition
+            //ï¿½ï¿½Ã¿ï¿½ï¿½transition ï¿½Ð°ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½action ï¿½ï¿½Õ¹ï¿½É¶ï¿½ï¿½transition
             Transition template_trans = new Transition(transition.src, transition.dst, 0, transition.name);
             template_trans.setGuard(transition.guard);
             t.trans.add(template_trans);
@@ -310,7 +314,7 @@ public class Transform2U implements NodeVisitor {
 
             if (v.getType().equals("time")) {
                 t.declarations += "clock d_t;\n";// for delay location
-                //ÔÚÇ°¶Ë²åÈëÒ»Ìõ±ßºÍÒ»¸ölocation
+                //ï¿½ï¿½Ç°ï¿½Ë²ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ßºï¿½Ò»ï¿½ï¿½location
                 Location delay_location = null;
                 Transition delay_trans = null;
                 for (Transition trans : t.getTrans()) {
@@ -335,8 +339,14 @@ public class Transform2U implements NodeVisitor {
                 t.trans.add(delay_trans);
                 t.locs.add(delay_location);
             } else if (v.getType().equals("static price")) {
-                //ÔÚdeclaration ÖÐ³õÊ¼»¯
-                String insertDeclared = v.getName() + "=" + v.dist.toString() + ";";
+                //ï¿½ï¿½declaration ï¿½Ð³ï¿½Ê¼ï¿½ï¿½
+                String insertDeclared="";
+                if (v.applied_var.equals("")) {
+                    insertDeclared = v.getName() + "=" + v.dist.toString() + ";";
+                } else {
+                    insertDeclared = v.applied_var + "=" + v.dist.toString() + ";";
+                }
+
                 int insertPosition = t.declarations.lastIndexOf("initialize(){") + 13;
                 t.declarations = t.declarations.substring(0, insertPosition) + insertDeclared + t.declarations.substring(insertPosition, t.declarations.length());
                 //for (t.locs)
@@ -347,7 +357,6 @@ public class Transform2U implements NodeVisitor {
         }
 
         //add query in this ua
-        //TODO need little transform
         this.umodel.queries.addAll(ua.getQueries());
 
     }
@@ -380,7 +389,7 @@ public class Transform2U implements NodeVisitor {
 
         if (ua != null) {
             if (annexs.size() == 1) {
-                //½ö½ö°üº¬UA
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½UA
                 ACompoentDeclare declare = null;
                 for (ACompoent comp : amodel.comps) {
                     if (comp.getCompoentImpl() == impl) {
@@ -400,7 +409,7 @@ public class Transform2U implements NodeVisitor {
                         outports.add(p);
                     }
                 }
-                //Éú³ÉÇ°¶ËÍ¼ , ÏÈ½ÓÊÜºó·¢ËÍµÄÑ­»·Í¼
+                //ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½Í¼ , ï¿½È½ï¿½ï¿½Üºï¿½ï¿½Íµï¿½Ñ­ï¿½ï¿½Í¼
                 Location start = null;
                 Transition lastTranstion = null;
                 boolean isStart = true;
@@ -410,7 +419,7 @@ public class Transform2U implements NodeVisitor {
                         start.setInitial(true);
                         lastTranstion = new Transition(start, null, 0, "");
                         lastTranstion.chann = new Channel("c_" + p.getName(), p.getDirection(), "");
-                        if(p.getClass()!=AEventPort.class) {
+                        if (p.getClass() != AEventPort.class) {
                             lastTranstion.chann.value = "v_" + p.getName();
                         }
                         isStart = false;

@@ -193,14 +193,14 @@ public class AAXLParser3 {
             }
 
             //constants
-            Element con = parsedAnnexSubclause.getChild("con");
-            for(Element cn : con.getChildren("const")){
-                String c_name = cn.getChild("constant").getAttributeValue("name");
-                HConstant c = new HConstant(c_name, "");
-                //c.setInitVal(0.7);
-                hybirdAnnex.getConstants().add(c);
-
-            }
+//            Element con = parsedAnnexSubclause.getChild("con");
+//            for(Element cn : con.getChildren("const")){
+//                String c_name = cn.getChild("constant").getAttributeValue("name");
+//                HConstant c = new HConstant(c_name, "");
+//                //c.setInitVal(0.7);
+//                hybirdAnnex.getConstants().add(c);
+//
+//            }
 
             //behavior
             Element beh = parsedAnnexSubclause.getChild("beh");
@@ -217,6 +217,46 @@ public class AAXLParser3 {
 
                 //process
                 for (Element process : behavior_process.getChildren("process")) {
+                    //choice
+                    Element choice = process.getChild("choice");
+                    if (choice != null) {
+                        for (Element alt : choice.getChildren("alt")) {
+                            Element relation = alt.getChild("boolean_expression").getChild("bool").getChild("relation");
+                            String relation_symbol = relation.getAttributeValue("relation_symbol");
+                            relation_symbol=relation_symbol.replace("<","&lt;").replace(">","&gt;");
+
+                            String variable_path = relation.getChild("lhs").getChild("term").getAttributeValue("variable");
+                            Element variable_element = xpfac.compile(Utils.convert2xpath(variable_path), Filters.element()).evaluateFirst(doc.getRootElement());
+                            AVar left = null;
+                            for (AVar v : hybirdAnnex.getVariables()) {
+                                if (v.getName().equals(variable_element.getAttributeValue("name"))) {
+                                    left = v;
+                                    break;
+                                }
+                            }
+
+                            String integer_literal = relation.getChild("rhs").getChild("term").getAttributeValue("integer_literal");
+
+                            String to_process_path = alt.getAttributeValue("behavior_process");
+                            Element to_process_element = xpfac.compile(Utils.convert2xpath(to_process_path), Filters.element()).evaluateFirst(doc.getRootElement());
+                            //for skip
+                            if (to_process_element.getChild("process").getAttributeValue("skip", "xx").equals("skip")) {
+                                HContinuous hContinuous = new HContinuous();
+                                hContinuous.setRank(-1);
+                                hContinuous.setLeft(left);
+                                hContinuous.alt=relation_symbol;
+                                hContinuous.setRight(Integer.valueOf(integer_literal));
+                                hp.getEvolutions().add(hContinuous);
+                            }else {
+                                HChoice hChoice = new HChoice();
+                                String process_name = to_process_element.getAttributeValue("name");
+                                hChoice.guard=left.getName()+relation_symbol+integer_literal;
+                                hChoice.end=hp;
+                                hp.choice=hChoice;
+                            }
+                        }
+                    }
+
                     //continuous_evolution
                     Element continuous_evolution = process.getChild("continuous_evolution");
                     if (continuous_evolution != null) {
@@ -229,7 +269,7 @@ public class AAXLParser3 {
                         Element x = (Element) xp.evaluateFirst(doc.getRootElement());
 
                         String right_path = continuous_evolution.getChild("rhs").getChild("diff").getAttributeValue("variable", "-1");
-                        String right_name ;
+                        String right_name;
                         if (right_path.equals("-1")) {
                             right_name = continuous_evolution.getChild("rhs").getChild("diff").getAttributeValue("numeric_literal");
                         } else {
@@ -280,28 +320,43 @@ public class AAXLParser3 {
                     if (assignment != null) {
                         Hassignment hassignment = new Hassignment();
                         String local_variable_path = assignment.getAttributeValue("local_variable");
-                        Element local_variable =  xpfac.compile(Utils.convert2xpath(local_variable_path), Filters.element()).evaluateFirst(doc.getRootElement());
+                        Element local_variable = xpfac.compile(Utils.convert2xpath(local_variable_path), Filters.element()).evaluateFirst(doc.getRootElement());
 
-                        String val = assignment.getChild("expression").getChild("term").getAttributeValue("integer_literal","null");
-                        if(val.equals("null")){
+                        String val = assignment.getChild("expression").getChild("term").getAttributeValue("integer_literal", "null");
+
+                        String val_d = assignment.getChild("expression").getChild("term").getAttributeValue("real_literal", "null");
+                        String minus = assignment.getChild("expression").getChild("term").getAttributeValue("unary_minus", "false");
+                        if (val.equals("null") && val_d.equals("null")) {
                             //*
-                            String right="";
+                            String right = "";
                             Element expression = assignment.getChild("expression");
                             String operator = expression.getAttributeValue("operator");
                             List<Element> terms = expression.getChildren("term");
                             String var_1 = xpfac.compile(Utils.convert2xpath(terms.get(0).getAttributeValue("variable")), Filters.element()).evaluateFirst(doc.getRootElement()).getAttributeValue("name");
-                            if(terms.get(0).getAttributeValue("unary_minus","false").equals("true")){
-                               var_1="-"+var_1;
+                            if (terms.get(0).getAttributeValue("unary_minus", "false").equals("true")) {
+                                var_1 = "-" + var_1;
                             }
                             String var_2 = xpfac.compile(Utils.convert2xpath(terms.get(1).getAttributeValue("variable")), Filters.element()).evaluateFirst(doc.getRootElement()).getAttributeValue("name");
-                            if(terms.get(1).getAttributeValue("unary_minus","false").equals("true")){
-                                var_2="-"+var_2;
+                            if (terms.get(1).getAttributeValue("unary_minus", "false").equals("true")) {
+                                var_2 = "-" + var_2;
                             }
 
-                            right=var_1+operator+var_2;
-                            hassignment.right=right;
-                        }else {
-                            hassignment.setVal(Integer.valueOf(val));
+                            right = var_1 + operator + var_2;
+                            hassignment.right = right;
+                        }
+                        if (!val.equals("null")) {
+                            if (minus.equals("true")) {
+                                hassignment.setVal(Integer.valueOf(val) * -1);
+                            } else {
+                                hassignment.setVal(Integer.valueOf(val));
+                            }
+                        }
+                        if (!val_d.equals("null")) {
+                            if (minus.equals("true")) {
+                                hassignment.setVal(Double.valueOf(val_d) * -1);
+                            } else {
+                                hassignment.setVal(Double.valueOf(val_d));
+                            }
                         }
 
                         hassignment.setVar(new AVar(local_variable.getAttributeValue("name"), ""));
@@ -317,6 +372,7 @@ public class AAXLParser3 {
                             if (p.getName().equals(repete_process.getAttributeValue("name"))) {
                                 p.isRepete = true;
                                 hp.subProcess = p;
+                                break;
                             }
 
                         }
@@ -344,7 +400,7 @@ public class AAXLParser3 {
                     String v_name = bv.getChild("variable_names").getChild("behavior_variable").getAttributeValue("var");
                     String v_type = bv.getChild("type").getAttributeValue("data_component_reference");
                     v_type = v_type.substring(v_type.indexOf("#") + 1).replace(".", "::");
-                    v_type="double";
+                    v_type = "double";
                     BVar v = new BVar(v_name, v_type);
 
                     Element expression = bv.getChild("expression");
@@ -405,7 +461,7 @@ public class AAXLParser3 {
                             guard = guard.replaceAll("\n", " ");
                             guard = guard.replaceAll("\t", "");
 //                            System.out.println(guard);
-                            guard=guard.replaceAll("<","&lt;");
+                            guard = guard.replaceAll("<", "&lt;");
                             bt_aadl.setGuard(guard);
                         }
 
@@ -489,8 +545,11 @@ public class AAXLParser3 {
                         String[] comp_var = matcher.group(2).split("\\.");
 
                         APort port_by_name = Utils.find_port_by_name(amodel, comp_var[0], comp_var[1]);
-                        time_delay.setApplied(port_by_name);
-
+                        if (port_by_name == null) {
+                            time_delay.applied_var = comp_var[1];
+                        } else {
+                            time_delay.setApplied(port_by_name);
+                        }
                         ua.getVars().add(time_delay);
                     } else if (line.contains("price")) {
                         compile = Pattern.compile("price (.*?) applied to ([\\w\\.]*)");
@@ -568,9 +627,9 @@ public class AAXLParser3 {
 
             //for not basic -elq
             Element elq = each_act.getChild("elq");
-            if(elq!=null){
+            if (elq != null) {
                 List<Element> children = elq.getChild("actions").getChildren("action");
-                process_actions(ba,bu,children);
+                process_actions(ba, bu, children);
 
             }
 
@@ -606,21 +665,21 @@ public class AAXLParser3 {
                         //data
                         //Attribute val = (Attribute) xpfac.compile("//pn/@identifier", Filters.attribute()).evaluateFirst(communication);
                         Element eor = communication.getChild("po").getChild("eor");
-                        String val=null;
+                        String val = null;
                         boolean minus = false;
-                        if(eor!=null){
+                        if (eor != null) {
                             Element child = eor.getChild("exp1").getChild("se");
 
-                            String minus1 = child.getAttributeValue("minus","false");
-                            if(minus1.equals("true")){
-                                minus=true;
+                            String minus1 = child.getAttributeValue("minus", "false");
+                            if (minus1.equals("true")) {
+                                minus = true;
                             }
                             Element variable = child.getChild("v").getChild("variable");
-                            if(variable!=null){
+                            if (variable != null) {
                                 val = child.getChild("v").getChild("variable").getChild("pn").getAttributeValue("identifier");
                             }
                             Element const_v = child.getChild("v").getChild("const");
-                            if(const_v!=null){
+                            if (const_v != null) {
                                 //sb:rate
                                 //val=
                             }
@@ -628,8 +687,8 @@ public class AAXLParser3 {
 
                         if (val != null) {
                             BVar varByName = Utils.getVarByName(val, ba.getVariables());
-                            if(minus){
-                                varByName.setInitVal(varByName.getInitVal()*-1);
+                            if (minus) {
+                                varByName.setInitVal(varByName.getInitVal() * -1);
                             }
                             bu.add(new BUpdate(null, same_oppo_port, varByName));
                         } else {

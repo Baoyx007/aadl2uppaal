@@ -33,5 +33,35 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/jdom-2.0.6.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/jdom-2.0.6-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/lib/xalan/serializer-2.7.2.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/lib/xalan/xalan-2.7.2.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/lib/jaxen-1.1.6.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/lib/xercesImpl.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/lib/xml-apis.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/jdom-2.0.6-contrib.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/jdom-2.0.6-junit.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/jdom-2.0.6-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$USER_HOME$/Downloads/jdom-2.0.6/jdom-2.0.6-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

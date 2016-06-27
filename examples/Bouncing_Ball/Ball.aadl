@@ -1,0 +1,39 @@
+package Bouncing_Ball
+public
+	with BLESS;
+	with BLESS_Types;
+	system sys_ball
+	end sys_ball;
+	
+	system implementation sys_ball.impl
+		subcomponents
+			Ball: abstract Ball.impl;
+	end sys_ball.impl;
+	
+	abstract Ball
+	end Ball;
+
+	abstract implementation Ball.impl
+		annex hybrid {**
+			variables
+			   x : BLESS_Types::Time
+			   v : BLESS_Types::Time
+			   g : BLESS_Types::Real
+			   c : BLESS_Types::Real
+			behavior
+				Ball ::= v:= c*v & 'DT 1 x= v' & 'DT 1 v=g' & ( [x<=0]) -> Ball [] ([x>=0])-> Continue
+				Continue ::= skip
+				Start  ::=  v:=0 & x:=10  & c:=-0.7  & REPEAT(Ball)
+		**};
+		annex Uncertainty{**
+			
+			variables
+				static price g applied to Ball.g
+			distributions
+				g = Normal(-9.8,0.3)
+			queries
+			    p1 = Ball.x<5 && Ball.v<-1 under 1
+			
+		**};
+	end Ball.impl;
+end Bouncing_Ball;

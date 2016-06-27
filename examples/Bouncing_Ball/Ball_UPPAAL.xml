@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
-	<declaration>clock c;const int PERIOD=2;
+<declaration>clock c;const int PERIOD=2;
 const int MAsize=3;
 const int SR=3;
 const int b=1;
@@ -95,48 +95,63 @@ typedef struct
 
 MovementAuthority iMA;
 </declaration>
-	<template>
-		<name>Ball</name>
-		<declaration>
-double u_g;
-void initialize(){u_g=-1*Normal(9.8,0.3);
- }clock x;
+
+<template>
+<name>Ball</name>
+<declaration>
+
+clock x;
 clock v;
-clock g;
+double g;
 double c;
 
-clock d_t;
-</declaration>
-		<location id="id0" x="42" y="85">
-			<name x="32" y="55">Ball</name>
-			<label kind="invariant" x="0" y="119">x'==v&amp;&amp; v'==u_g &amp;&amp; x&gt;=0 &amp;&amp; g&lt;100</label>
-		</location>
-		<location id="id1" x="238" y="51">
-			<name x="228" y="21">Start</name>
-			<urgent/>
-		</location>
-		<init ref="id1"/>
-		<transition>
-			<source ref="id0"/>
-			<target ref="id0"/>
-			<label kind="guard" x="-49" y="22">x&lt;=0</label>
-			<label kind="assignment" x="-42" y="51">v = c*v</label>
-			<nail x="12" y="55"/>
-			<nail x="72" y="55"/>
-		</transition>
-		<transition>
-			<source ref="id1"/>
-			<target ref="id0"/>
-			<label kind="assignment" x="102" y="68">v = 0,x=10,c=-0.7,initialize()</label>
-		</transition>
-	</template>
-	<system> system Ball;</system>
-	<queries>
-		<query>
-			<formula>Pr[&lt;=2] (&lt;&gt; Ball.x&lt;5 &amp;&amp; Ball.v &lt;-1)
-			</formula>
-			<comment>
-			</comment>
-		</query>
-	</queries>
+ 
+double u_g;
+void initialize(){g=Normal(-9.8,0.3);
+ }</declaration>
+<location id="id1">
+<name>Ball</name>
+<label kind="invariant">x'==v&amp;&amp; v'==g&amp;&amp; x&gt;=0 </label>
+</location>
+
+<location id="id2">
+<name>Start</name>
+<label kind="invariant"> </label>
+<urgent/>
+</location>
+
+<init ref="id2"/>
+
+<!--  -->
+<transition>
+<source ref="id1"/>
+<target ref="id1"/>
+<label kind="guard" ></label>
+<label kind="assignment">v = c*v </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id1"/>
+<target ref="id1"/>
+<label kind="guard" >x&lt;=0</label>
+<label kind="assignment">v = c*v </label>
+</transition>
+
+<!--  -->
+<transition>
+<source ref="id2"/>
+<target ref="id1"/>
+<label kind="guard" ></label>
+<label kind="assignment">v=0, x=10, c=-0.7,initialize() </label>
+</transition>
+
+</template>
+
+<system> system Ball;</system>
+<queries>
+<query>
+<formula>Pr[&lt;= 1](&lt;&gt; Ball.x&lt;5 &amp;&amp; Ball.v&lt;-1 )</formula>
+</query>
+</queries>
 </nta>
